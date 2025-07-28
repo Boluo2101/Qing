@@ -14,7 +14,7 @@ class WordsHeader extends StatelessWidget {
     final double normalizedOffset = (scrollOffset / 50).clamp(0.0, 1.0);
     final Color textColor = Color.lerp(
       Colors.white,
-      Colors.black.withOpacity(0.8),
+      Colors.black.withOpacity(1),
       normalizedOffset,
     )!;
 
@@ -28,13 +28,13 @@ class WordsHeader extends StatelessWidget {
       children: [
         Container(
           height: MediaQuery.of(context).padding.top, // 动态获取状态栏高度
-          color: Colors.transparent, // 设置背景颜色
+          // color: Colors.transparent, // 设置背景颜色
         ),
 
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10), // 内边距
           height: 50, // 固定高度
-          decoration: BoxDecoration(color: Colors.transparent), // 设置背景颜色
+          // decoration: BoxDecoration(color: Colors.transparent), // 设置背景颜色
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
