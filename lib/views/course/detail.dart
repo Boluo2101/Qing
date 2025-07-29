@@ -140,7 +140,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
 
               if (arrayIndex >= courseData!.length - 1) {
                 // 如果已经是最后一页，重置到第一页
-                arrayIndex = 0;
+                context.pop(); // 返回上一页
               } else {
                 arrayIndex++;
               }
@@ -211,19 +211,10 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
 
           // 课程封面图片
           if (showDetails && currentObjByIndex!['imageUrl'] != null)
-            Container(
-              width: double.infinity,
-              height: 200,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  image: NetworkImage(
-                    '${CONFIGs.API_HOST}/' + currentObjByIndex!['imageUrl'],
-                  ),
-                  fit: BoxFit.cover,
-                ),
-              ),
+            Image.network(
+              '${CONFIGs.API_HOST}/' + currentObjByIndex!['imageUrl'],
             ),
+
           const SizedBox(height: 16),
 
           // 课程描述
@@ -242,25 +233,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               style: const TextStyle(fontSize: 20, height: 1.5),
             ),
           ],
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 60,
-            child: Text(
-              '$label:',
-              style: TextStyle(color: Colors.grey[600], fontSize: 14),
-            ),
-          ),
-          Expanded(child: Text(value, style: const TextStyle(fontSize: 14))),
         ],
       ),
     );
