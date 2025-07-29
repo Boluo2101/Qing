@@ -1,6 +1,4 @@
 // File: lib/main.dart
-// Flutter的核心包，包含Material Design组件库
-// 相当于Vue中的组件库（如Element UI、Vuetify等）
 import 'package:flutter/material.dart';
 
 // Flutter的核心包，包含Flutter的基础功能
@@ -23,9 +21,6 @@ import 'package:go_router/go_router.dart';
 // Flutter中所有UI都是Widget，这是Flutter的核心思想
 // 类似于Vue的组件概念，但Flutter中万物皆Widget
 import 'components/footer_tabs.dart';
-
-// Header Bar 组件
-// (注释保留，暂未使用)
 
 // Pages - 页面组件
 // Flutter中页面也是Widget，遵循组合优于继承的原则
@@ -270,6 +265,7 @@ class MyApp extends ConsumerWidget {
       theme: ThemeData(
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
       ),
     );
   }

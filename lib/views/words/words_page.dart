@@ -1,6 +1,12 @@
 // UI
 import 'package:flutter/material.dart';
 
+// Tools
+import 'dart:math';
+
+// Routers
+import 'package:go_router/go_router.dart';
+
 // Components
 import 'header_component.dart';
 
@@ -14,6 +20,21 @@ class WordsPage extends StatefulWidget {
 class _WordsPageState extends State<WordsPage> {
   final ScrollController _scrollController = ScrollController();
   double _scrollOffset = 0.0;
+
+  // 背景渐变色
+  static const bgColors = [
+    [Colors.blueAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
+    [Colors.orangeAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
+    [Colors.greenAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
+    [Colors.black, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
+    [Colors.pinkAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
+    [Colors.tealAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
+    [Colors.amberAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
+    [Colors.deepPurpleAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
+  ];
+
+  // 从随 bgColors 机选一组
+  final bgColorsRand = bgColors[Random().nextInt(bgColors.length)];
 
   @override
   void initState() {
@@ -49,11 +70,7 @@ class _WordsPageState extends State<WordsPage> {
             // 渐变背景色
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  Colors.blueAccent,
-                  const Color(0xFFF5F5F5),
-                  const Color(0xFFF5F5F5),
-                ],
+                colors: bgColorsRand,
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -62,11 +79,11 @@ class _WordsPageState extends State<WordsPage> {
               controller: _scrollController,
               children: [
                 // 为顶部预留空间
-                SizedBox(height: MediaQuery.of(context).padding.top),
+                SizedBox(height: 50),
                 // Current Book
                 Container(
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  margin: const EdgeInsets.fromLTRB(16, 6, 16, 16),
+                  margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5),
@@ -116,7 +133,7 @@ class _WordsPageState extends State<WordsPage> {
 
                                 // Progress bar
                                 LinearProgressIndicator(
-                                  value: 0.3, // 假设进度为70%
+                                  value: 0.5, // 假设进度为50%
                                   backgroundColor: Colors.grey[200],
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                     Colors.lightBlueAccent.withOpacity(0.5),
@@ -202,6 +219,7 @@ class _WordsPageState extends State<WordsPage> {
                           onPressed: () {
                             print('开始学习');
                             // 在这里添加开始学习的处理逻辑
+                            GoRouter.of(context).push('/course/1');
                           },
                           child: Text(
                             '开始学习吧!',

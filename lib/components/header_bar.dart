@@ -12,6 +12,7 @@ class HeaderBar extends ConsumerWidget {
   final List<Widget> leftActions; // 左侧操作按钮列表，类似于Vue的左侧插槽
   final List<Widget> rightActions; // 右侧操作按钮列表，类似于Vue的右侧插槽
   final Color? bgColor; // 背景色，可选属性，类似于Vue的backgroundColor prop
+  final bool? borderShow;
 
   // 构造函数 - required确保必传参数
   const HeaderBar({
@@ -20,6 +21,7 @@ class HeaderBar extends ConsumerWidget {
     required this.title, // 必传的标题
     required this.leftActions, // 必传的左侧操作列表
     required this.rightActions, // 必传的右侧操作列表
+    this.borderShow = true, // 是否显示底部分割线，默认true
   });
 
   @override
@@ -56,7 +58,7 @@ class HeaderBar extends ConsumerWidget {
             horizontal: 0,
             vertical: 0,
           ), // 内边距
-          height: 40, // 固定高度
+          height: 50, // 固定高度
           // BoxDecoration - 容器装饰器，用于复杂样式
           // 类似于Vue中的样式对象，但Flutter更加类型安全
           // BoxDecoration常用属性：
@@ -68,12 +70,14 @@ class HeaderBar extends ConsumerWidget {
           // - image: 背景图片
           decoration: BoxDecoration(
             color: Colors.white, // 背景颜色
-            border: Border(
-              bottom: BorderSide(
-                color: Colors.grey, // 分割线颜色
-                width: 0.5, // 分割线宽度
-              ), // 底部边框
-            ),
+            border: borderShow == true
+                ? Border(
+                    bottom: BorderSide(
+                      color: Colors.grey, // 分割线颜色
+                      width: 0.5, // 分割线宽度
+                    ), // 底部边框
+                  )
+                : null,
           ),
 
           // Row - 水平布局容器
