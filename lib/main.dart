@@ -7,6 +7,11 @@ import 'package:flutter/services.dart';
 // Flutter的基础包，包含kDebugMode等调试相关常量
 import 'package:flutter/foundation.dart';
 
+// LocalStorage - SharedPreferences工具类
+// SharedPreferences是Flutter中用于存储简单数据的持久化存储
+// 类似于Vue的localStorage，但Flutter提供了更强大的类型支持
+import 'tools/shared_preferences_util.dart';
+
 // Store - 状态管理库
 // Riverpod是Flutter官方推荐的状态管理方案，类似于Vue的Vuex/Pinia
 // Flutter推崇"状态提升"的思想，通过Provider向下传递状态
@@ -36,7 +41,10 @@ import 'routes/index.dart' as routes;
 // runApp() 是Flutter框架的启动函数，接收一个Widget作为根组件
 // ProviderScope 是Riverpod的根容器，类似于Vue的createApp().use(store)
 // const 关键字用于创建编译时常量，Flutter推荐使用const优化性能
-void main() {
+void main() async {
+  // 确保 Flutter 框架初始化完成
+  WidgetsFlutterBinding.ensureInitialized();
+
   // 设置底部导航条为半透明
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -46,6 +54,11 @@ void main() {
       statusBarColor: Colors.transparent, // 状态栏颜色
     ),
   );
+
+  // 初始化 SharedPreferences
+  // SharedPreferencesUtil 是一个工具类，用于简化 SharedPreferences 的使用
+  await SharedPreferencesUtil.init();
+
   runApp(const ProviderScope(child: MyApp())); // 启动应用
 }
 

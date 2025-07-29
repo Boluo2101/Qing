@@ -3,10 +3,16 @@
 // UI
 import 'package:flutter/material.dart';
 
+// 类似于Vue的localStorage，但Flutter提供了更强大的类型支持
+import '../../tools/shared_preferences_util.dart';
+
 class WordsHeader extends StatelessWidget {
   const WordsHeader(this.scrollOffset, {super.key});
 
   final double scrollOffset;
+
+  // 能量点，从缓存来
+  int get energyPoints => SharedPreferencesUtil.getInt('energyPoints') ?? 0;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +69,7 @@ class WordsHeader extends StatelessWidget {
                         color: Colors.orangeAccent,
                       ),
                       SizedBox(width: 5), // 间距
-                      Text('100', style: TextStyle(color: textColor)),
+                      Text('$energyPoints', style: TextStyle(color: textColor)),
                     ],
                   ),
                 ),

@@ -10,6 +10,9 @@ import 'package:go_router/go_router.dart';
 // Components
 import 'header_component.dart';
 
+// 类似于Vue的localStorage，但Flutter提供了更强大的类型支持
+import '../../tools/shared_preferences_util.dart';
+
 class WordsPage extends StatefulWidget {
   const WordsPage({super.key});
 
@@ -183,7 +186,7 @@ class _WordsPageState extends State<WordsPage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('需新学'),
+                                  Text('需复习'),
                                   SizedBox(height: 5),
                                   Text(
                                     '1000',

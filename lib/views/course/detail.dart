@@ -1,6 +1,9 @@
 // UI
 import 'package:flutter/material.dart';
 
+// Tools
+import 'package:intl/intl.dart';
+
 // Routers
 import 'package:go_router/go_router.dart';
 
@@ -12,6 +15,9 @@ import '../../services/books_service.dart';
 
 // CONFIGs
 import '../../configs/configs.dart';
+
+// 类似于Vue的localStorage，但Flutter提供了更强大的类型支持
+import '../../tools/shared_preferences_util.dart';
 
 class CourseDetailPage extends StatefulWidget {
   final String? courseId;
@@ -65,6 +71,12 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
         isLoading = false;
       });
     }
+  }
+
+  void _addEnergyPoints({int num = 1}) {
+    // 增加能量点的逻辑
+    int newPoints = (SharedPreferencesUtil.getInt('energyPoints') ?? 0) + num;
+    SharedPreferencesUtil.setInt('energyPoints', newPoints);
   }
 
   @override
@@ -124,6 +136,9 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               currentObjByIndex = courseData![arrayIndex];
             });
           } else if (index == 1) {
+            // 更新能量点缓存
+            _addEnergyPoints();
+
             // 下一页逻辑
             setState(() {
               if (!showDetails) {
@@ -200,7 +215,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               Text(
                 currentObjByIndex!['title'] ?? '未知课程',
                 style: TextStyle(
-                  fontSize: !showDetails ? 30 : 24,
+                  fontSize: !showDetails ? 34 : 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
