@@ -32,6 +32,7 @@ import 'components/footer_tabs.dart';
 // 与Vue的单文件组件(.vue)不同，Flutter使用.dart文件
 import 'views/common/error_page_404.dart';
 import 'views/words/words_page.dart';
+import 'views/game/game_car_page.dart';
 
 // Routes - 路由配置
 // 使用命名空间导入，避免命名冲突，类似于Vue的模块化导入
@@ -162,7 +163,7 @@ final GoRouter router = GoRouter(
       pageBuilder: (context, state) {
         return NoTransitionPage(
           child: PageWithBottomNavBar(
-            child: const NotFoundPage(), // 这里可以替换为实际的通讯录页面组件
+            child: GameCarPage(), // 这里可以替换为实际的通讯录页面组件
           ),
         );
       },
