@@ -52,7 +52,7 @@ class BottomTabs extends ConsumerWidget {
           label: '字词', // 标签文本
         ),
         BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: '学习'),
-        BottomNavigationBarItem(icon: Icon(Icons.explore), label: '一起学'),
+        BottomNavigationBarItem(icon: Icon(Icons.explore), label: '一起玩'),
         BottomNavigationBarItem(icon: Icon(Icons.money_outlined), label: '商城'),
         BottomNavigationBarItem(icon: Icon(Icons.person), label: '我'),
       ],
