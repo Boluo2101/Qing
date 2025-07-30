@@ -85,14 +85,17 @@ class _GameCarPageState extends State<GameCarPage>
   // 当前车辆的图标（在初始化时确定，避免重绘时变化）
   String currentCarUnit = '🚗';
 
+  // 当前车辆索引（用于循环选择车辆）
+  int currentCarIndex = 0;
+
   // 动画时间（用于湖泊图标摇摆）
   double animationTime = 0.0;
 
   // 随机数生成器
   final Random _random = Random(); // 三种绿色供草地随机选择
   final List<Color> _grassColors = [
-    Color(0xFF4CAF50), // 标准绿色
     Color(0xFF8BC34A), // 浅绿色
+    Color(0xFF4CAF50), // 标准绿色
     Color(0xFF2E7D32), // 深绿色
   ];
 
@@ -140,26 +143,30 @@ class _GameCarPageState extends State<GameCarPage>
     '🚜', // 拖拉机
   ];
 
-  // 随机选择车辆单位
-  String get randomCarUnit => _carUnits[_random.nextInt(_carUnits.length)];
-
-  // 选择随机车辆单位（用于初始化）
-  void _selectRandomCarUnit() {
-    currentCarUnit = _carUnits[_random.nextInt(_carUnits.length)];
+  // 选择下一辆车（按顺序循环）
+  void _selectNextCarUnit() {
+    currentCarIndex = (currentCarIndex + 1) % _carUnits.length;
+    currentCarUnit = _carUnits[currentCarIndex];
   }
 
-  // 重新选择车辆单位（可用于游戏中途更换车辆）
+  // 选择初始车辆单位（第一辆车）
+  void _selectInitialCarUnit() {
+    currentCarIndex = 0;
+    currentCarUnit = _carUnits[currentCarIndex];
+  }
+
+  // 手动切换到下一辆车
   void changeCarUnit() {
     setState(() {
-      _selectRandomCarUnit();
+      _selectNextCarUnit();
     });
   }
 
   @override
   void initState() {
     super.initState();
-    // 选择随机车辆单位
-    _selectRandomCarUnit();
+    // 选择初始车辆单位
+    _selectInitialCarUnit();
 
     // 初始化游戏网格（包括随机道路生成）
     _initializeGrid();
@@ -219,8 +226,21 @@ class _GameCarPageState extends State<GameCarPage>
           });
         }
       }
-    }); // 自动开始动画
-    _animationController!.repeat();
+    });
+
+    // 添加动画完成监听器，每次完成一轮时切换车辆
+    _animationController!.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        // 切换到下一辆车
+        _selectNextCarUnit();
+        setState(() {}); // 更新UI显示新车辆
+        // 重新开始动画
+        _animationController!.forward(from: 0.0);
+      }
+    });
+
+    // 自动开始动画
+    _animationController!.forward();
   }
 
   // 初始化游戏网格 - 优化内存分配
@@ -351,14 +371,26 @@ class _GameCarPageState extends State<GameCarPage>
         int totalRows = startRow - endRow; // 注意：现在是从下到上，所以是startRow - endRow
         int horizontalDistance = endCol - startCol;
 
+        // 确保totalRows至少为1，避免除零错误
+        if (totalRows <= 0) totalRows = 1;
+
         for (int i = 0; i < totalRows && startRow - i >= 0; i++) {
-          double t = i / (totalRows - 1); // 参数化时间 0-1
+          double t = totalRows > 1 ? i / (totalRows - 1) : 0; // 参数化时间 0-1
+
+          // 根据转弯幅度调整控制点
+          double turnSharpness =
+              horizontalDistance.abs() / (GRID_COLS / 4.0); // 转弯锐度
+          turnSharpness = turnSharpness.clamp(0.1, 1.0);
 
           // 使用三次贝塞尔曲线实现平滑转弯
           // P0 = 起点, P1 = 控制点1, P2 = 控制点2, P3 = 终点
           double p0 = startCol.toDouble();
-          double p1 = startCol + horizontalDistance * 0.1; // 控制点1：轻微偏移
-          double p2 = endCol - horizontalDistance * 0.1; // 控制点2：接近终点
+          double p1 =
+              startCol +
+              horizontalDistance * (0.2 + turnSharpness * 0.1); // 控制点1：根据转弯幅度调整
+          double p2 =
+              endCol -
+              horizontalDistance * (0.2 + turnSharpness * 0.1); // 控制点2：根据转弯幅度调整
           double p3 = endCol.toDouble();
 
           // 三次贝塞尔曲线公式
@@ -382,10 +414,13 @@ class _GameCarPageState extends State<GameCarPage>
           }
         }
       } else {
-        // 垂直路段：使用线性插值，可能有轻微曲线
+        // 垂直路段：使用线性插值，确保路径连续性
+        int totalRows = startRow - endRow;
+        if (totalRows <= 0) totalRows = 1;
+
         for (int row = startRow; row > endRow && row >= 0; row--) {
-          double progress = (startRow - endRow) > 0
-              ? (startRow - row) / (startRow - endRow)
+          double progress = totalRows > 0
+              ? (startRow - row) / totalRows.toDouble()
               : 0;
 
           // 使用平滑的插值函数
@@ -404,11 +439,22 @@ class _GameCarPageState extends State<GameCarPage>
       }
     }
 
-    // 确保路径覆盖所有行
+    // 确保路径覆盖所有行，并填补空隙
     while (roadCenterPath.length < GRID_ROWS) {
       roadCenterPath.add(
         roadCenterPath.isNotEmpty ? roadCenterPath.last : GRID_COLS ~/ 2,
       );
+    }
+
+    // 填补路径中的空隙（插值处理）
+    for (int row = 1; row < roadCenterPath.length - 1; row++) {
+      if (roadCenterPath[row] == GRID_COLS ~/ 2 &&
+          roadCenterPath[row - 1] != GRID_COLS ~/ 2 &&
+          roadCenterPath[row + 1] != GRID_COLS ~/ 2) {
+        // 如果当前行是默认值但前后都有实际值，进行插值
+        roadCenterPath[row] =
+            ((roadCenterPath[row - 1] + roadCenterPath[row + 1]) / 2).round();
+      }
     }
   }
 
@@ -417,14 +463,33 @@ class _GameCarPageState extends State<GameCarPage>
     for (int row = 0; row < centerPath.length && row < GRID_ROWS; row++) {
       int centerCol = centerPath[row];
 
-      // 确保道路宽度：中心线左右各width/2格
+      // 计算当前位置的转弯角度，调整道路宽度
+      int currentWidth = width;
+      if (row > 0 && row < centerPath.length - 1) {
+        int prevCol = centerPath[row - 1];
+        int nextCol = centerPath[row + 1];
+        int colDiff = (nextCol - prevCol).abs();
+
+        // 如果转弯较急，适当增加道路宽度
+        if (colDiff > 2) {
+          currentWidth = (width + 1).clamp(width, width + 2);
+        }
+      }
+
+      // 确保道路宽度：中心线左右各currentWidth/2格
       for (
-        int col = centerCol - width ~/ 2;
-        col < centerCol + width ~/ 2;
+        int col = centerCol - currentWidth ~/ 2;
+        col < centerCol + currentWidth ~/ 2;
         col++
       ) {
         if (col >= 0 && col < GRID_COLS) {
-          gameGrid[row][col] = 1; // 设置为道路
+          // 设置道路类型：1=普通道路，3=中心线
+          if (col == centerCol) {
+            gameGrid[row][col] = 3; // 中心线
+          } else {
+            gameGrid[row][col] = 1; // 普通道路
+          }
+
           // 道路不能被湖泊覆盖，清除该位置的湖泊
           if (terrainGrid[row][col] == 2) {
             terrainGrid[row][col] = 0;
@@ -555,80 +620,153 @@ class _GameCarPageState extends State<GameCarPage>
     _performLakeCollapse();
   }
 
-  // 湖泊塌陷算法 - 让湖泊形状更自然，持续向浅色草地扩展
+  // 湖泊坍缩算法 - 优化版本：使用边界追踪和智能扩展
   void _performLakeCollapse() {
-    // 进行多轮湖泊扩展，直到没有更多变化
-    bool hasChanged = true;
-    int maxIterations = 10; // 防止无限循环
+    print('开始湖泊坍缩...');
+
     int iteration = 0;
+    int maxIterations = 15; // 增加最大迭代次数
 
-    while (hasChanged && iteration < maxIterations) {
-      hasChanged = false;
+    // 使用Set来追踪边界位置，提高性能
+    Set<String> expansionCandidates = Set<String>();
+
+    // 初始化：找到所有湖泊边界附近的浅色草地
+    _initializeExpansionCandidates(expansionCandidates);
+
+    while (expansionCandidates.isNotEmpty && iteration < maxIterations) {
       iteration++;
+      print('湖泊坍缩第 $iteration 轮，待处理候选: ${expansionCandidates.length}');
 
-      List<List<int>> newTerrainGrid = ListExtensions.create2D(
-        GRID_ROWS,
-        GRID_COLS,
-        0,
-      );
+      Set<String> newCandidates = Set<String>();
+      int changedCells = 0;
 
-      // 复制当前地形状态
-      for (int row = 0; row < GRID_ROWS; row++) {
-        for (int col = 0; col < GRID_COLS; col++) {
-          newTerrainGrid[row][col] = terrainGrid[row][col];
+      // 只处理边界候选位置，而不是整个网格
+      for (String candidateKey in expansionCandidates) {
+        List<int> pos = candidateKey.split(',').map(int.parse).toList();
+        int row = pos[0];
+        int col = pos[1];
+
+        // 确保位置有效且是草地
+        if (row < 0 ||
+            row >= GRID_ROWS ||
+            col < 0 ||
+            col >= GRID_COLS ||
+            terrainGrid[row][col] != 0 ||
+            gameGrid[row][col] != 0) {
+          continue;
         }
-      }
 
-      for (int row = 0; row < GRID_ROWS; row++) {
-        for (int col = 0; col < GRID_COLS; col++) {
-          // 只处理草地格子（不覆盖道路）
-          if (terrainGrid[row][col] == 0 && gameGrid[row][col] == 0) {
-            List<List<int>> neighbors = _getNeighbors(row, col);
-            int lakeNeighbors = 0;
-            bool hasOnlyLightGrassNeighbors = true;
+        List<List<int>> neighbors = _getNeighbors(row, col);
+        int lakeNeighbors = 0;
 
-            // 统计周围湖泊邻居的数量，并检查非湖泊邻居是否都是浅色草地
-            for (var neighbor in neighbors) {
-              int neighborRow = neighbor[0];
-              int neighborCol = neighbor[1];
+        // 统计湖泊邻居
+        for (var neighbor in neighbors) {
+          if (terrainGrid[neighbor[0]][neighbor[1]] == 2) {
+            lakeNeighbors++;
+          }
+        }
 
-              if (terrainGrid[neighborRow][neighborCol] == 2) {
-                lakeNeighbors++;
-              } else if (terrainGrid[neighborRow][neighborCol] == 0 &&
-                  gameGrid[neighborRow][neighborCol] == 0) {
-                // 检查草地邻居的颜色
-                if (grassColorGrid[neighborRow][neighborCol] != 1) {
-                  // 如果有非浅色草地邻居，则不能继续扩展
-                  hasOnlyLightGrassNeighbors = false;
-                }
-              } else if (gameGrid[neighborRow][neighborCol] == 1) {
-                // 如果有道路邻居，则不能继续扩展
-                hasOnlyLightGrassNeighbors = false;
-              }
-            }
+        bool shouldExpand = false;
 
-            bool shouldExpand = false;
-
-            if (lakeNeighbors >= 3) {
-              // 常规扩展：周围有3个或更多湖泊邻居
+        // 湖泊可以坍缩浅色草地(0)和标准草地(1)，禁止坍缩深色草地(2)
+        if (grassColorGrid[row][col] <= 1) {
+          if (lakeNeighbors >= 3) {
+            // 强扩展：浅色/标准草地且周围有3+湖泊邻居
+            shouldExpand = true;
+          } else if (lakeNeighbors >= 2) {
+            // 中等扩展：浅色/标准草地且有2+湖泊邻居
+            shouldExpand = true;
+          } else if (lakeNeighbors >= 1) {
+            // 弱扩展：浅色/标准草地且周围主要是浅色草地或湖泊
+            if (_isInLightGrassCluster(row, col)) {
               shouldExpand = true;
-            } else if (lakeNeighbors >= 1) {
-              // 浅色草地特殊扩展：当前是浅色草地，或者周围只有浅色草地
-              if (grassColorGrid[row][col] == 1 || hasOnlyLightGrassNeighbors) {
-                shouldExpand = true;
-              }
             }
+          }
+        } else if (grassColorGrid[row][col] == 2) {
+          // 特殊情况：深色草地被湖泊完全包围时也会坍缩
+          if (lakeNeighbors >= 6) {
+            // 如果深色草地周围有6个或更多湖泊邻居，认为被完全包围
+            shouldExpand = true;
+          }
+        }
 
-            if (shouldExpand && terrainGrid[row][col] != 2) {
-              newTerrainGrid[row][col] = 2;
-              hasChanged = true;
+        if (shouldExpand) {
+          terrainGrid[row][col] = 2;
+          changedCells++;
+
+          // 添加新扩展位置的邻居作为下轮候选
+          for (var neighbor in neighbors) {
+            int nRow = neighbor[0];
+            int nCol = neighbor[1];
+            if (nRow >= 0 &&
+                nRow < GRID_ROWS &&
+                nCol >= 0 &&
+                nCol < GRID_COLS &&
+                terrainGrid[nRow][nCol] == 0 &&
+                gameGrid[nRow][nCol] == 0) {
+              newCandidates.add('$nRow,$nCol');
             }
           }
         }
       }
 
-      terrainGrid = newTerrainGrid;
+      expansionCandidates = newCandidates;
+      print('第 $iteration 轮湖泊坍缩完成，变化了 $changedCells 个格子');
+
+      if (changedCells == 0) {
+        print('没有更多变化，提前结束坍缩');
+        break;
+      }
     }
+
+    print('湖泊坍缩结束，总共进行了 $iteration 轮');
+  }
+
+  // 初始化扩展候选位置
+  void _initializeExpansionCandidates(Set<String> candidates) {
+    for (int row = 0; row < GRID_ROWS; row++) {
+      for (int col = 0; col < GRID_COLS; col++) {
+        if (terrainGrid[row][col] == 2) {
+          // 是湖泊
+          // 添加湖泊周围的草地作为候选
+          List<List<int>> neighbors = _getNeighbors(row, col);
+          for (var neighbor in neighbors) {
+            int nRow = neighbor[0];
+            int nCol = neighbor[1];
+            if (terrainGrid[nRow][nCol] == 0 && gameGrid[nRow][nCol] == 0) {
+              candidates.add('$nRow,$nCol');
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 检查是否在浅色草地聚集区域
+  bool _isInLightGrassCluster(int row, int col) {
+    List<List<int>> neighbors = _getNeighbors(row, col);
+    int lightGrassOrLakeCount = 0;
+    int totalValidNeighbors = 0;
+
+    for (var neighbor in neighbors) {
+      int nRow = neighbor[0];
+      int nCol = neighbor[1];
+
+      // 跳过道路格子
+      if (gameGrid[nRow][nCol] != 0) continue;
+
+      totalValidNeighbors++;
+
+      if (terrainGrid[nRow][nCol] == 2 || // 湖泊
+          (terrainGrid[nRow][nCol] == 0 && grassColorGrid[nRow][nCol] == 0)) {
+        // 浅色草地
+        lightGrassOrLakeCount++;
+      }
+    }
+
+    // 如果周围60%以上是浅色草地或湖泊，则认为是在聚集区域
+    return totalValidNeighbors > 0 &&
+        (lightGrassOrLakeCount / totalValidNeighbors) >= 0.6;
   }
 
   // 执行一轮塌陷迭代
@@ -789,9 +927,12 @@ class GameGridPainter extends CustomPainter {
     // 创建画笔
     final Paint cellPaint = Paint()..style = PaintingStyle.fill;
 
-    // 渲染所有格子
+    // 第一层：渲染草地和湖泊（背景层）
     for (int row = 0; row < gridRows; row++) {
       for (int col = 0; col < gridCols; col++) {
+        // 跳过道路格子，稍后单独绘制
+        if (gameGrid[row][col] == 1 || gameGrid[row][col] == 3) continue;
+
         // 计算格子位置
         double x = col * cellWidth;
         double y = row * cellHeight;
@@ -799,10 +940,7 @@ class GameGridPainter extends CustomPainter {
 
         // 确定格子颜色
         Color cellColor;
-        if (gameGrid[row][col] == 1) {
-          // 道路
-          cellColor = Colors.grey;
-        } else if (terrainGrid[row][col] == 2) {
+        if (terrainGrid[row][col] == 2) {
           // 湖泊使用随机蓝色
           int lakeColorIndex = (row + col) % lakeColors.length;
           cellColor = lakeColors[lakeColorIndex];
@@ -817,11 +955,44 @@ class GameGridPainter extends CustomPainter {
       }
     }
 
-    // 绘制车辆
-    _drawCar(canvas, cellWidth, cellHeight);
-
-    // 绘制湖泊图标
+    // 第二层：绘制湖泊图标
     _drawLakeIcons(canvas, cellWidth, cellHeight);
+
+    // 第三层：渲染道路（高优先级）
+    for (int row = 0; row < gridRows; row++) {
+      for (int col = 0; col < gridCols; col++) {
+        // 只绘制道路格子
+        if (gameGrid[row][col] != 1 && gameGrid[row][col] != 3) continue;
+
+        // 计算格子位置
+        double x = col * cellWidth;
+        double y = row * cellHeight;
+        Rect cellRect = Rect.fromLTWH(x, y, cellWidth, cellHeight);
+
+        // 确定道路颜色
+        Color cellColor;
+        if (gameGrid[row][col] == 1) {
+          // 普通道路
+          cellColor = Color(0xFF424242); // 深灰色道路
+        } else if (gameGrid[row][col] == 3) {
+          // 中心线 - 黄色虚线效果（每隔2行显示）
+          if (row % 4 == 0 || row % 4 == 1) {
+            cellColor = Color(0xFFFFFFFF);
+          } else {
+            cellColor = Color(0xFF424242); // 道路底色
+          }
+        } else {
+          cellColor = Colors.transparent; // 不应该到达这里
+        }
+
+        // 绘制道路格子
+        cellPaint.color = cellColor;
+        canvas.drawRect(cellRect, cellPaint);
+      }
+    }
+
+    // 第四层：绘制车辆（最高优先级）
+    _drawCar(canvas, cellWidth, cellHeight);
   }
 
   void _drawCar(Canvas canvas, double cellWidth, double cellHeight) {
