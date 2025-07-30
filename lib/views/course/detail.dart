@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 // Tools
-import 'package:intl/intl.dart';
 
 // Routers
 import 'package:go_router/go_router.dart';
@@ -86,7 +85,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
         preferredSize: const Size.fromHeight(50),
         child: HeaderBar(
           borderShow: false,
-          // title: DateFormat('yyyy-MM-dd').format(DateTime.now()),
           title: '',
           leftActions: [
             IconButton(

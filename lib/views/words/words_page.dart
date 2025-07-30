@@ -176,7 +176,7 @@ class _WordsPageState extends State<WordsPage> {
                                     style: TextStyle(
                                       fontSize: 40,
                                       fontWeight: FontWeight.bold,
-                                      fontStyle: FontStyle.italic,
+                                      // fontStyle: FontStyle.italic,
                                     ),
                                   ),
                                 ],
@@ -193,7 +193,7 @@ class _WordsPageState extends State<WordsPage> {
                                     style: TextStyle(
                                       fontSize: 40,
                                       fontWeight: FontWeight.bold,
-                                      fontStyle: FontStyle.italic,
+                                      // fontStyle: FontStyle.italic,
                                     ),
                                   ),
                                 ],
@@ -214,10 +214,7 @@ class _WordsPageState extends State<WordsPage> {
                             backgroundColor: Color(0xFF144ee6),
                             foregroundColor: Colors.white,
                             shadowColor: Colors.transparent,
-                            minimumSize: Size(
-                              double.infinity,
-                              48,
-                            ), // 设置宽度100%，高度48
+                            minimumSize: Size(double.infinity, 50),
                           ),
                           onPressed: () {
                             print('开始学习');

@@ -69,7 +69,10 @@ class WordsHeader extends StatelessWidget {
                         color: Colors.orangeAccent,
                       ),
                       SizedBox(width: 5), // 间距
-                      Text('$energyPoints', style: TextStyle(color: textColor)),
+                      Text(
+                        '${_formatEnergyPoints(energyPoints)}',
+                        style: TextStyle(color: textColor),
+                      ),
                     ],
                   ),
                 ),
@@ -146,5 +149,18 @@ class WordsHeader extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+String _formatEnergyPoints(int points) {
+  // 格式化能量点数值
+  if (points <= 999) {
+    return points.toString();
+  } else if (points < 10000) {
+    return '${(points / 1000).toStringAsFixed(2)}k'; // 转换为千位
+  } else if (points < 1000000) {
+    return '${(points / 10000).toStringAsFixed(2)}w'; // 转换为万位
+  } else {
+    return '∞';
   }
 }
