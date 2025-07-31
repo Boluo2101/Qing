@@ -118,11 +118,17 @@ class _WordsPageState extends State<WordsPage> {
                                       ),
                                     ),
                                     SizedBox(width: 10),
-                                    Text(
-                                      '修改',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 12,
+                                    GestureDetector(
+                                      onTap: () {
+                                        // 在这里添加修改逻辑
+                                        GoRouter.of(context).push('/books');
+                                      },
+                                      child: Text(
+                                        '修改',
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 12,
+                                        ),
                                       ),
                                     ),
                                     Icon(

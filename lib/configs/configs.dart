@@ -5,4 +5,7 @@ class CONFIGs {
 
   // 超时配置
   static const int connectTimeout = 30000; // 30秒
+
+  // 主题
+  static const themeOptions = {};
 }

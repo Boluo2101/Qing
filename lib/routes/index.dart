@@ -9,6 +9,7 @@ import '../views/common/error_page_404.dart';
 
 // Pages
 import '../views/course/detail.dart';
+import '../views/books/books_page.dart';
 
 // 路由列表 - 定义所有应用路由
 // 类似于Vue Router的routes数组，但Flutter使用GoRoute对象
@@ -17,6 +18,14 @@ final List<GoRoute> routes = [
   // 定义404页面路由 - 当访问未定义的路由时跳转到此页面
   // 类似于Vue Router的catch-all路由
   GoRoute(path: '/404', builder: (context, state) => const NotFoundPage()),
+
+  // 所有书籍页面
+  GoRoute(
+    path: '/books',
+    builder: (context, state) {
+      return BooksPage();
+    },
+  ),
 
   // 课程学习详情页
   GoRoute(
