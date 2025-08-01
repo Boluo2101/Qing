@@ -48,11 +48,11 @@ class _GameCarPageState extends State<GameCarPage>
   static const int GRID_ROWS = 160;
   static const int GRID_COLS = 80;
   static const int ROAD_WIDTH = 4;
-  static const int CAR_SIZE = 2;
-  static const int MIN_LAKE_COUNT = 2;
-  static const int MAX_LAKE_COUNT = 4;
+  static const int CAR_SIZE = 1;
+  static const int MIN_LAKE_COUNT = 3;
+  static const int MAX_LAKE_COUNT = 5;
   static const int MIN_TURN_COUNT = 3;
-  static const int MAX_TURN_COUNT = 4;
+  static const int MAX_TURN_COUNT = 6;
   static const int ANIMATION_DURATION_SECONDS = 10; // === 游戏数据 ===
   List<List<int>> gameGrid = [];
 
@@ -76,8 +76,8 @@ class _GameCarPageState extends State<GameCarPage>
   Animation<double>? _animation;
 
   // 车的当前位置（左上角）
-  int carRow = 0;
-  int carCol = 0;
+  int carRow = 160;
+  int carCol = 80;
 
   // 车辆旋转角度（用于抖动效果）
   double carRotation = 0.0;
@@ -155,13 +155,6 @@ class _GameCarPageState extends State<GameCarPage>
     currentCarUnit = _carUnits[currentCarIndex];
   }
 
-  // 手动切换到下一辆车
-  void changeCarUnit() {
-    setState(() {
-      _selectNextCarUnit();
-    });
-  }
-
   @override
   void initState() {
     super.initState();
@@ -179,6 +172,15 @@ class _GameCarPageState extends State<GameCarPage>
   void dispose() {
     _animationController?.dispose();
     super.dispose();
+
+    // 恢复状态栏为默认样式
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent, // 恢复透明状态栏
+        statusBarIconBrightness: Brightness.dark, // 恢复默认图标颜色
+        statusBarBrightness: Brightness.light, // 恢复默认亮度
+      ),
+    );
   }
 
   // 初始化动画
@@ -272,7 +274,7 @@ class _GameCarPageState extends State<GameCarPage>
     );
   }
 
-  // 生成随机道路（从右下角到左上角，宽度4格）
+  // 生成随机道路（从右下角到左上角）
   void _generateRandomRoad() {
     roadCenterPath = []; // 重置道路中心线路径
 
@@ -490,10 +492,10 @@ class _GameCarPageState extends State<GameCarPage>
             gameGrid[row][col] = 1; // 普通道路
           }
 
-          // 道路不能被湖泊覆盖，清除该位置的湖泊
-          if (terrainGrid[row][col] == 2) {
-            terrainGrid[row][col] = 0;
-          }
+          // // 道路不能被湖泊覆盖，清除该位置的湖泊
+          // if (terrainGrid[row][col] == 2) {
+          //   terrainGrid[row][col] = 0;
+          // }
         }
       }
     }
@@ -579,7 +581,7 @@ class _GameCarPageState extends State<GameCarPage>
             // 计算与已使用位置的距离，确保至少间隔2格
             int rowDiff = (pos[0] - usedPos[0]).abs();
             int colDiff = (pos[1] - usedPos[1]).abs();
-            if (rowDiff <= 2 && colDiff <= 2) {
+            if (rowDiff <= 4 && colDiff <= 4) {
               return false; // 距离太近，不可用
             }
           }
@@ -612,7 +614,7 @@ class _GameCarPageState extends State<GameCarPage>
 
   void _applyTerrainCollapseAlgorithm() {
     // 进行多轮塌陷，让地形更自然
-    for (int iteration = 0; iteration < 3; iteration++) {
+    for (int iteration = 0; iteration < 4; iteration++) {
       _performCollapseIteration();
     }
 
@@ -625,7 +627,7 @@ class _GameCarPageState extends State<GameCarPage>
     print('开始湖泊坍缩...');
 
     int iteration = 0;
-    int maxIterations = 15; // 增加最大迭代次数
+    int maxIterations = 10; // 增加最大迭代次数
 
     // 使用Set来追踪边界位置，提高性能
     Set<String> expansionCandidates = Set<String>();
@@ -670,10 +672,7 @@ class _GameCarPageState extends State<GameCarPage>
 
         // 湖泊可以坍缩浅色草地(0)和标准草地(1)，禁止坍缩深色草地(2)
         if (grassColorGrid[row][col] <= 1) {
-          if (lakeNeighbors >= 3) {
-            // 强扩展：浅色/标准草地且周围有3+湖泊邻居
-            shouldExpand = true;
-          } else if (lakeNeighbors >= 2) {
+          if (lakeNeighbors >= 2) {
             // 中等扩展：浅色/标准草地且有2+湖泊邻居
             shouldExpand = true;
           } else if (lakeNeighbors >= 1) {
@@ -690,22 +689,25 @@ class _GameCarPageState extends State<GameCarPage>
           }
         }
 
-        if (shouldExpand) {
-          terrainGrid[row][col] = 2;
-          changedCells++;
+        if (!shouldExpand) {
+          // 如果不满足扩展条件，继续下一个候选
+          continue;
+        }
 
-          // 添加新扩展位置的邻居作为下轮候选
-          for (var neighbor in neighbors) {
-            int nRow = neighbor[0];
-            int nCol = neighbor[1];
-            if (nRow >= 0 &&
-                nRow < GRID_ROWS &&
-                nCol >= 0 &&
-                nCol < GRID_COLS &&
-                terrainGrid[nRow][nCol] == 0 &&
-                gameGrid[nRow][nCol] == 0) {
-              newCandidates.add('$nRow,$nCol');
-            }
+        terrainGrid[row][col] = 2;
+        changedCells++;
+
+        // 添加新扩展位置的邻居作为下轮候选
+        for (var neighbor in neighbors) {
+          int nRow = neighbor[0];
+          int nCol = neighbor[1];
+          if (nRow >= 0 &&
+              nRow < GRID_ROWS &&
+              nCol >= 0 &&
+              nCol < GRID_COLS &&
+              terrainGrid[nRow][nCol] == 0 &&
+              gameGrid[nRow][nCol] == 0) {
+            newCandidates.add('$nRow,$nCol');
           }
         }
       }
@@ -851,10 +853,18 @@ class _GameCarPageState extends State<GameCarPage>
 
   @override
   Widget build(BuildContext context) {
+    // 设置状态栏字体为白色
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.green, // 设置状态栏背景色
+        statusBarIconBrightness: Brightness.light, // 状态栏图标为白色
+      ),
+    );
+
     // 如果游戏网格还没有初始化，显示加载界面
     if (gameGrid.isEmpty) {
       return const Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.green,
         body: Center(child: CircularProgressIndicator()),
       );
     }
@@ -1014,19 +1024,11 @@ class GameGridPainter extends CustomPainter {
     canvas.rotate(carRotation);
     canvas.translate(-carCenterX, -carCenterY);
 
-    // 绘制车辆背景（可选）
-    final Paint carBackgroundPaint = Paint()
-      ..color = Colors.red.withOpacity(0)
-      ..style = PaintingStyle.fill;
-
-    Rect carRect = Rect.fromLTWH(carX, carY, carWidth, carHeight);
-    canvas.drawRect(carRect, carBackgroundPaint);
-
     // 绘制车辆emoji（使用TextPainter）
     final textSpan = TextSpan(
       text: currentCarUnit, // 使用固定的车辆单位
       style: TextStyle(
-        fontSize: (cellWidth + cellHeight) / 2 * 8, // 根据格子大小调整字体大小
+        fontSize: (cellWidth + cellHeight) / 2 * 6, // 根据格子大小调整字体大小
         fontFamily: 'Apple Color Emoji', // 确保emoji正确显示
       ),
     );
