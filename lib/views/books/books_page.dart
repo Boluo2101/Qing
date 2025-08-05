@@ -85,7 +85,7 @@ class _BooksPageState extends State<BooksPage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 20, // 假设有20个课程
+              itemCount: 100, // 假设有100个课程
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
@@ -93,57 +93,60 @@ class _BooksPageState extends State<BooksPage> {
                     print('点击了课程 $index');
                     GoRouter.of(context).push('/course/$index');
                   },
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.book_sharp,
-                        size: 90,
-                        color: Colors.blueAccent,
-                      ),
-                      SizedBox(width: 0),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  '或许没用的知识增加了',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 5),
-
-                            // Progress bar
-                            LinearProgressIndicator(
-                              value: 0.5, // 假设进度为50%
-                              backgroundColor: Colors.grey[200],
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                Colors.lightBlueAccent.withOpacity(0.5),
-                              ),
-                            ),
-
-                            SizedBox(height: 5),
-
-                            // Progress Text
-                            Text(
-                              '收录N1级别重点单词收录N1级别重点单词收录N1级别重点单词收录N1级别重点单词收录N1级别重点单词收录N1级别重点单词',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey,
-                              ),
-                              maxLines: 2,
-                            ),
-                          ],
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.book_sharp,
+                          size: 90,
+                          color: Colors.blueAccent,
                         ),
-                      ),
-                      SizedBox(width: 16),
-                    ],
+                        SizedBox(width: 0),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    '或许没用的知识增加了',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 5),
+
+                              // Progress bar
+                              LinearProgressIndicator(
+                                value: 0.5, // 假设进度为50%
+                                backgroundColor: Colors.grey[200],
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  Colors.lightBlueAccent.withOpacity(0.5),
+                                ),
+                              ),
+
+                              SizedBox(height: 5),
+
+                              // Progress Text
+                              Text(
+                                '收录N1级别重点单词收录N1级别重点单词收录N1级别重点单词收录N1级别重点单词收录N1级别重点单词收录N1级别重点单词',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                                maxLines: 2,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 16),
+                      ],
+                    ),
                   ),
                 );
               },
