@@ -23,16 +23,16 @@ class BooksService {
     final response = await http.get(url, headers: headers);
     print('响应状态码: ${response.statusCode}');
 
-    if (response.statusCode == 200) {
-      print('响应数据: ${response.body}');
-      final decodedData = json.decode(response.body);
-
-      // 如果返回的是List，直接返回
-      if (decodedData is List) {
-        return decodedData.cast<Map<String, dynamic>>();
-      }
-    } else {
+    if (response.statusCode != 200) {
       throw Exception('Failed to load book details');
+    }
+
+    print('响应数据: ${response.body}');
+    final decodedData = json.decode(response.body);
+
+    // 如果返回的是List，直接返回
+    if (decodedData is List) {
+      return decodedData.cast<Map<String, dynamic>>();
     }
     throw Exception('Invalid response format: not a List');
   }
