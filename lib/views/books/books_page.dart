@@ -1,5 +1,6 @@
 // UI
 import 'package:flutter/material.dart';
+import '../../tools/custom_colors.dart';
 
 // Components
 import '../../components/header_bar.dart';
@@ -49,28 +50,6 @@ class _BooksPageState extends ConsumerState<BooksPage> {
       });
     } catch (e) {
       print('加载课程列表失败: $e');
-    }
-  }
-
-  // 根据字符串返回不同的颜色
-  Color getColorByStr(String str) {
-    switch (str) {
-      case 'blue':
-        return Colors.blue;
-      case 'green':
-        return Colors.green;
-      case 'red':
-        return Colors.red;
-      case 'yellow':
-        return Colors.yellow;
-      case 'pink':
-        return Colors.pink;
-      case 'orange':
-        return Colors.orange;
-      case 'teal':
-        return Colors.teal;
-      default:
-        return Colors.grey; // 默认颜色
     }
   }
 
@@ -175,7 +154,9 @@ class _BooksPageState extends ConsumerState<BooksPage> {
                         Icon(
                           Icons.book_sharp,
                           size: 90,
-                          color: getColorByStr(book['color'] ?? 'default'),
+                          color: CustomColors.getColorByStr(
+                            book['color'] ?? 'default',
+                          ),
                         ),
                         SizedBox(width: 0),
                         Expanded(
@@ -202,7 +183,7 @@ class _BooksPageState extends ConsumerState<BooksPage> {
                                 value: 0.5, // 假设进度为50%
                                 backgroundColor: Colors.grey[200],
                                 valueColor: AlwaysStoppedAnimation<Color>(
-                                  getColorByStr(
+                                  CustomColors.getColorByStr(
                                     book['color'] ?? 'default',
                                   ).withOpacity(0.5),
                                 ),

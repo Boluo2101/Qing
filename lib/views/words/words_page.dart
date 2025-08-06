@@ -1,5 +1,6 @@
 // UI
 import 'package:flutter/material.dart';
+import '../../tools/custom_colors.dart';
 
 // Tools
 import 'dart:math';
@@ -49,28 +50,6 @@ class _WordsPageState extends ConsumerState<WordsPage> {
     super.dispose();
   }
 
-  // 根据字符串返回不同的颜色
-  Color getColorByStr(String str) {
-    switch (str) {
-      case 'blue':
-        return Colors.blue;
-      case 'green':
-        return Colors.green;
-      case 'red':
-        return Colors.red;
-      case 'yellow':
-        return Colors.yellow;
-      case 'pink':
-        return Colors.pink;
-      case 'orange':
-        return Colors.orange;
-      case 'teal':
-        return Colors.teal;
-      default:
-        return Colors.grey; // 默认颜色
-    }
-  }
-
   // 返回渐变颜色数组
   List<Color> getGradientColorsByColor(Color color) {
     return [color, Color(0xFFF5F5F5), Color(0xFFF5F5F5)];
@@ -98,7 +77,9 @@ class _WordsPageState extends ConsumerState<WordsPage> {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: getGradientColorsByColor(
-                  getColorByStr(currentBook?['color'] ?? 'default'),
+                  CustomColors.getColorByStr(
+                    currentBook?['color'] ?? 'default',
+                  ),
                 ),
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -126,7 +107,7 @@ class _WordsPageState extends ConsumerState<WordsPage> {
                           Icon(
                             Icons.book_sharp,
                             size: 90,
-                            color: getColorByStr(
+                            color: CustomColors.getColorByStr(
                               currentBook?['color'] ?? 'default',
                             ),
                           ),
@@ -173,7 +154,7 @@ class _WordsPageState extends ConsumerState<WordsPage> {
                                   value: 0.5, // 假设进度为50%
                                   backgroundColor: Colors.grey[200],
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                    getColorByStr(
+                                    CustomColors.getColorByStr(
                                       currentBook?['color'] ?? 'default',
                                     ).withOpacity(0.5),
                                   ),
@@ -247,7 +228,7 @@ class _WordsPageState extends ConsumerState<WordsPage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            backgroundColor: getColorByStr(
+                            backgroundColor: CustomColors.getColorByStr(
                               currentBook?['color'] ?? 'default',
                             ),
                             foregroundColor: Colors.white,
