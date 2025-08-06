@@ -10,6 +10,7 @@ import '../views/common/error_page_404.dart';
 // Pages
 import '../views/course/detail.dart';
 import '../views/books/books_page.dart';
+import '../views/feedback/feedback_page.dart';
 
 // 路由列表 - 定义所有应用路由
 // 类似于Vue Router的routes数组，但Flutter使用GoRoute对象
@@ -34,6 +35,14 @@ final List<GoRoute> routes = [
       final courseId = state.pathParameters['id'];
       print('Navigating to course detail with ID: $courseId');
       return CourseDetailPage(courseId: courseId);
+    },
+  ),
+
+  // 反馈页
+  GoRoute(
+    path: '/feedback',
+    builder: (context, state) {
+      return FeedbackPage();
     },
   ),
 ];

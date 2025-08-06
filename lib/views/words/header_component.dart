@@ -2,6 +2,7 @@
 
 // UI
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 // 类似于Vue的localStorage，但Flutter提供了更强大的类型支持
 import '../../tools/shared_preferences_util.dart';
@@ -140,7 +141,11 @@ class WordsHeader extends StatelessWidget {
                 children: [
                   IconButton(
                     icon: Icon(Icons.mail_outline_sharp, color: textColor),
-                    onPressed: () {},
+                    onPressed: () {
+                      print('消息被点击了');
+                      // Jump to feedback
+                      context.push('/feedback'); // 跳转到反馈页面
+                    },
                   ),
                 ],
               ),
