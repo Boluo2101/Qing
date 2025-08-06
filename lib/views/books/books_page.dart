@@ -139,14 +139,13 @@ class _BooksPageState extends ConsumerState<BooksPage> {
           Tabs(
             style: 'tag',
             tabsList: [
-              {'key': '1', 'label': '日语'},
-              {'key': '2', 'label': '汉语'},
-              {'key': '3', 'label': '法语'},
-              {'key': '4', 'label': '西班牙语'},
-              {'key': '5', 'label': '德语'},
-              {'key': '6', 'label': '俄语'},
-              {'key': '7', 'label': '阿拉伯语'},
-              {'key': '8', 'label': '葡萄牙语'},
+              {'key': '1', 'label': '普通话'},
+              {'key': '2', 'label': '四川话'},
+              {'key': '3', 'label': '粤语'},
+              {'key': '4', 'label': '英语'},
+              {'key': '5', 'label': '日语'},
+              {'key': '6', 'label': '韩语'},
+              {'key': '7', 'label': '法语'},
             ],
             currentIndex: subTabIndex,
             onTap: (index) {
