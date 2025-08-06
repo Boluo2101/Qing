@@ -36,4 +36,26 @@ class BooksService {
     }
     throw Exception('Invalid response format: not a List');
   }
+
+  // 获取全部课程列表
+  static Future<List<Map<String, dynamic>>> getAllBooks() async {
+    final url = Uri.parse('$baseUrl/mocks/books/all.json');
+    print('请求 URL: $url');
+
+    final response = await http.get(url, headers: headers);
+    print('响应状态码: ${response.statusCode}');
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load books');
+    }
+
+    print('响应数据: ${response.body}');
+    final decodedData = json.decode(response.body);
+
+    // 如果返回的是List，直接返回
+    if (decodedData is List) {
+      return decodedData.cast<Map<String, dynamic>>();
+    }
+    throw Exception('Invalid response format: not a List');
+  }
 }

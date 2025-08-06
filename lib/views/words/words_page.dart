@@ -13,31 +13,20 @@ import 'header_component.dart';
 // 类似于Vue的localStorage，但Flutter提供了更强大的类型支持
 import '../../tools/shared_preferences_util.dart';
 
-class WordsPage extends StatefulWidget {
+// Providers
+import '../../providers/books.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class WordsPage extends ConsumerStatefulWidget {
   const WordsPage({super.key});
 
   @override
-  State<WordsPage> createState() => _WordsPageState();
+  ConsumerState<WordsPage> createState() => _WordsPageState();
 }
 
-class _WordsPageState extends State<WordsPage> {
+class _WordsPageState extends ConsumerState<WordsPage> {
   final ScrollController _scrollController = ScrollController();
   double _scrollOffset = 0.0;
-
-  // 背景渐变色
-  static const bgColors = [
-    [Colors.blueAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
-    [Colors.orangeAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
-    [Colors.greenAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
-    [Colors.black, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
-    [Colors.pinkAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
-    [Colors.tealAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
-    [Colors.amberAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
-    [Colors.deepPurpleAccent, Color(0xFFF5F5F5), Color(0xFFF5F5F5)],
-  ];
-
-  // 从随 bgColors 机选一组
-  final bgColorsRand = bgColors[Random().nextInt(bgColors.length)];
 
   @override
   void initState() {
@@ -50,9 +39,41 @@ class _WordsPageState extends State<WordsPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  // 根据字符串返回不同的颜色
+  Color getColorByStr(String str) {
+    switch (str) {
+      case 'blue':
+        return Colors.blue;
+      case 'green':
+        return Colors.green;
+      case 'red':
+        return Colors.red;
+      case 'yellow':
+        return Colors.yellow;
+      case 'pink':
+        return Colors.pink;
+      case 'orange':
+        return Colors.orange;
+      case 'teal':
+        return Colors.teal;
+      default:
+        return Colors.grey; // 默认颜色
+    }
+  }
+
+  // 返回渐变颜色数组
+  List<Color> getGradientColorsByColor(Color color) {
+    return [color, Color(0xFFF5F5F5), Color(0xFFF5F5F5)];
   }
 
   @override
@@ -65,6 +86,9 @@ class _WordsPageState extends State<WordsPage> {
       colorLerpValue,
     )!;
 
+    final booksState = ref.watch(booksProvider);
+    final currentBook = booksState.currentBook;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -73,7 +97,9 @@ class _WordsPageState extends State<WordsPage> {
             // 渐变背景色
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: bgColorsRand,
+                colors: getGradientColorsByColor(
+                  getColorByStr(currentBook?['color'] ?? 'default'),
+                ),
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
               ),
@@ -100,7 +126,9 @@ class _WordsPageState extends State<WordsPage> {
                           Icon(
                             Icons.book_sharp,
                             size: 90,
-                            color: Color(0xFF144ee6),
+                            color: getColorByStr(
+                              currentBook?['color'] ?? 'default',
+                            ),
                           ),
                           SizedBox(width: 0),
                           Expanded(
@@ -111,7 +139,7 @@ class _WordsPageState extends State<WordsPage> {
                                 Row(
                                   children: [
                                     Text(
-                                      '或许没用的知识增加了',
+                                      currentBook?['name'] ?? '未知课程',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
@@ -145,7 +173,9 @@ class _WordsPageState extends State<WordsPage> {
                                   value: 0.5, // 假设进度为50%
                                   backgroundColor: Colors.grey[200],
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.lightBlueAccent.withOpacity(0.5),
+                                    getColorByStr(
+                                      currentBook?['color'] ?? 'default',
+                                    ).withOpacity(0.5),
                                   ),
                                 ),
 
@@ -153,7 +183,7 @@ class _WordsPageState extends State<WordsPage> {
 
                                 // Progress Text
                                 Text(
-                                  '666 / 6000',
+                                  currentBook?['description'] ?? '',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey,
@@ -217,7 +247,9 @@ class _WordsPageState extends State<WordsPage> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            backgroundColor: Color(0xFF144ee6),
+                            backgroundColor: getColorByStr(
+                              currentBook?['color'] ?? 'default',
+                            ),
                             foregroundColor: Colors.white,
                             shadowColor: Colors.transparent,
                             minimumSize: Size(double.infinity, 50),
@@ -225,7 +257,9 @@ class _WordsPageState extends State<WordsPage> {
                           onPressed: () {
                             print('开始学习');
                             // 在这里添加开始学习的处理逻辑
-                            GoRouter.of(context).push('/course/1');
+                            GoRouter.of(
+                              context,
+                            ).push('/course/${currentBook?['id']}');
                           },
                           child: Text(
                             '开始学习吧!',

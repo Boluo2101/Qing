@@ -8,16 +8,90 @@ import '../../components/tabs.dart';
 // Routers
 import 'package:go_router/go_router.dart';
 
-class BooksPage extends StatefulWidget {
+// APIs
+import '../../services/books_service.dart';
+
+// 类似于Vue的localStorage，但Flutter提供了更强大的类型支持
+import '../../tools/shared_preferences_util.dart';
+
+// Providers
+import '../../providers/books.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class BooksPage extends ConsumerStatefulWidget {
   const BooksPage({super.key});
 
   @override
-  State<BooksPage> createState() => _BooksPageState();
+  ConsumerState<BooksPage> createState() => _BooksPageState();
 }
 
-class _BooksPageState extends State<BooksPage> {
+class _BooksPageState extends ConsumerState<BooksPage> {
+  List<Map<String, dynamic>>? booksList; // 课程列表
+
   int tabIndex = 0; // 当前选中的标签索引
   int subTabIndex = 0; // 当前选中的子标签索引
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAllBooks();
+  }
+
+  Future<void> _loadAllBooks() async {
+    try {
+      final books = await BooksService.getAllBooks();
+      print('获取到的课程列表: $books');
+      setState(() {
+        booksList = books;
+
+        // 同时更新到状态管理
+        ref.read(booksProvider.notifier).updateBooks(books);
+      });
+    } catch (e) {
+      print('加载课程列表失败: $e');
+    }
+  }
+
+  // 根据字符串返回不同的颜色
+  Color getColorByStr(String str) {
+    switch (str) {
+      case 'blue':
+        return Colors.blue;
+      case 'green':
+        return Colors.green;
+      case 'red':
+        return Colors.red;
+      case 'yellow':
+        return Colors.yellow;
+      case 'pink':
+        return Colors.pink;
+      case 'orange':
+        return Colors.orange;
+      case 'teal':
+        return Colors.teal;
+      default:
+        return Colors.grey; // 默认颜色
+    }
+  }
+
+  void clickBook(Map<String, dynamic> book) {
+    // 点击课程卡片，跳转到课程详情页
+    print('点击了课程: ${book['name']}');
+
+    // 更新当前选中的书籍状态
+    ref.read(booksProvider.notifier).selectBook(book);
+
+    // show toast
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('已选择课程: ${book['name']}'),
+        duration: Duration(seconds: 2),
+      ),
+    );
+
+    // back
+    context.pop(); // 返回上一页，类似于Vue的this.$router.back()
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,13 +159,15 @@ class _BooksPageState extends State<BooksPage> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: 100, // 假设有100个课程
+              itemCount: booksList?.length ?? 0,
               itemBuilder: (context, index) {
+                final book = booksList![index];
                 return InkWell(
                   onTap: () {
                     // 点击课程卡片，跳转到课程详情页
                     print('点击了课程 $index');
-                    GoRouter.of(context).push('/course/$index');
+                    // GoRouter.of(context).push('/course/${book['id']}');
+                    clickBook(book);
                   },
                   child: Padding(
                     padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
@@ -100,18 +176,19 @@ class _BooksPageState extends State<BooksPage> {
                         Icon(
                           Icons.book_sharp,
                           size: 90,
-                          color: Colors.blueAccent,
+                          color: getColorByStr(book['color'] ?? 'default'),
                         ),
                         SizedBox(width: 0),
                         Expanded(
                           child: Column(
+                            mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [
                                   Text(
-                                    '或许没用的知识增加了',
+                                    book['name'] ?? '未知课程',
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
@@ -126,7 +203,9 @@ class _BooksPageState extends State<BooksPage> {
                                 value: 0.5, // 假设进度为50%
                                 backgroundColor: Colors.grey[200],
                                 valueColor: AlwaysStoppedAnimation<Color>(
-                                  Colors.lightBlueAccent.withOpacity(0.5),
+                                  getColorByStr(
+                                    book['color'] ?? 'default',
+                                  ).withOpacity(0.5),
                                 ),
                               ),
 
@@ -134,7 +213,7 @@ class _BooksPageState extends State<BooksPage> {
 
                               // Progress Text
                               Text(
-                                '收录N1级别重点单词收录N1级别重点单词收录N1级别重点单词收录N1级别重点单词收录N1级别重点单词收录N1级别重点单词',
+                                book['description'] ?? '',
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.grey,

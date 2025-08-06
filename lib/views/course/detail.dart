@@ -211,11 +211,16 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             children: [
               SizedBox(height: !showDetails ? 160 : 0),
 
-              Text(
-                currentObjByIndex!['title'] ?? '未知课程',
-                style: TextStyle(
-                  fontSize: !showDetails ? 34 : 24,
-                  fontWeight: FontWeight.bold,
+              Expanded(
+                child: Text(
+                  textAlign: !showDetails
+                      ? TextAlign.center
+                      : TextAlign.start, // 根据是否显示详情调整对齐方式
+                  currentObjByIndex!['title'] ?? '未知课程',
+                  style: TextStyle(
+                    fontSize: !showDetails ? 34 : 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -226,6 +231,9 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           // 课程封面图片
           if (showDetails && currentObjByIndex!['imageUrl'] != null)
             Image.network(
+              errorBuilder: (context, error, stackTrace) {
+                return Container(); // 返回空容器，不显示任何内容
+              },
               '${CONFIGs.API_HOST}/' + currentObjByIndex!['imageUrl'],
             ),
 
