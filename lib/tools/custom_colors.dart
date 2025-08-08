@@ -5,7 +5,7 @@ class CustomColors {
   static Color getColorByStr(String str) {
     switch (str) {
       case 'blue':
-        return Colors.blue;
+        return Color(0xFF144ee6);
       case 'green':
         return Colors.green;
       case 'red':
