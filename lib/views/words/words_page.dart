@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 
 // Components
 import 'header_component.dart';
+import '../../components/business/book_item.dart';
 
 // 类似于Vue的localStorage，但Flutter提供了更强大的类型支持
 import '../../tools/shared_preferences_util.dart';
@@ -102,79 +103,45 @@ class _WordsPageState extends ConsumerState<WordsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Book Info
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.book_sharp,
-                            size: 90,
-                            color: CustomColors.getColorByStr(
-                              currentBook?['color'] ?? 'default',
-                            ),
+                      BookItem(
+                        color: currentBook?['color'] ?? 'default',
+                        title: currentBook?['name'] ?? '未知课程',
+                        description: currentBook?['description'] ?? '',
+                        processNumber: currentBook?['process'] ?? 0.0,
+                        icon: Icon(
+                          Icons.book_sharp,
+                          size: 90,
+                          color: CustomColors.getColorByStr(
+                            currentBook?['color'] ?? 'default',
                           ),
-                          SizedBox(width: 0),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      currentBook?['name'] ?? '未知课程',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    GestureDetector(
-                                      onTap: () {
-                                        // 在这里添加修改逻辑
-                                        GoRouter.of(context).push('/books');
-                                      },
-                                      child: Text(
-                                        '修改',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                    Icon(
-                                      Icons.chevron_right_outlined,
-                                      size: 12,
-                                      color: Colors.grey,
-                                    ),
-                                  ],
+                        ),
+                        titleBtn: Row(
+                          children: [
+                            SizedBox(width: 10),
+                            GestureDetector(
+                              onTap: () {
+                                // 在这里添加修改逻辑
+                                GoRouter.of(context).push('/books');
+                              },
+                              child: Text(
+                                '修改',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
                                 ),
-                                SizedBox(height: 10),
-
-                                // Progress bar
-                                LinearProgressIndicator(
-                                  value: 0.5, // 假设进度为50%
-                                  backgroundColor: Colors.grey[200],
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    CustomColors.getColorByStr(
-                                      currentBook?['color'] ?? 'default',
-                                    ).withOpacity(0.5),
-                                  ),
-                                ),
-
-                                SizedBox(height: 10),
-
-                                // Progress Text
-                                Text(
-                                  currentBook?['description'] ?? '',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 16),
-                        ],
+                            Icon(
+                              Icons.chevron_right_outlined,
+                              size: 12,
+                              color: Colors.grey,
+                            ),
+                          ],
+                        ),
+                        onTap: () {
+                          // 点击课程卡片，跳转到课程详情页
+                          print('点击了课程: ${currentBook?['name']}');
+                        },
                       ),
 
                       // Statistics

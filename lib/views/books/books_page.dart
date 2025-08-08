@@ -5,6 +5,7 @@ import '../../tools/custom_colors.dart';
 // Components
 import '../../components/header_bar.dart';
 import '../../components/tabs.dart';
+import '../../components/business/book_item.dart';
 
 // Routers
 import 'package:go_router/go_router.dart';
@@ -140,73 +141,23 @@ class _BooksPageState extends ConsumerState<BooksPage> {
               itemCount: booksList?.length ?? 0,
               itemBuilder: (context, index) {
                 final book = booksList![index];
-                return InkWell(
-                  onTap: () {
-                    // 点击课程卡片，跳转到课程详情页
-                    print('点击了课程 $index');
-                    // GoRouter.of(context).push('/course/${book['id']}');
-                    clickBook(book);
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.book_sharp,
-                          size: 90,
-                          color: CustomColors.getColorByStr(
-                            book['color'] ?? 'default',
-                          ),
-                        ),
-                        SizedBox(width: 0),
-                        Expanded(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    book['name'] ?? '未知课程',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 5),
-
-                              // Progress bar
-                              LinearProgressIndicator(
-                                value: 0.5, // 假设进度为50%
-                                backgroundColor: Colors.grey[200],
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  CustomColors.getColorByStr(
-                                    book['color'] ?? 'default',
-                                  ).withOpacity(0.5),
-                                ),
-                              ),
-
-                              SizedBox(height: 5),
-
-                              // Progress Text
-                              Text(
-                                book['description'] ?? '',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
-                                maxLines: 2,
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 16),
-                      ],
+                return BookItem(
+                  color: book['color'] ?? 'default',
+                  title: book['name'] ?? '未知课程',
+                  description: book['description'] ?? '',
+                  processNumber: book['process'] ?? 0.0,
+                  icon: Icon(
+                    Icons.book_sharp,
+                    size: 90,
+                    color: CustomColors.getColorByStr(
+                      book['color'] ?? 'default',
                     ),
                   ),
+                  onTap: () {
+                    // 点击课程卡片，跳转到课程详情页
+                    print('点击了课程: ${book['name']}');
+                    clickBook(book);
+                  },
                 );
               },
             ),
