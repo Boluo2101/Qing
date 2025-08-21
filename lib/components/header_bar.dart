@@ -49,7 +49,7 @@ class HeaderBar extends ConsumerWidget {
         // - child: 子组件，只能包含一个子组件
         Container(
           height: MediaQuery.of(context).padding.top, // 动态获取状态栏高度
-          color: Colors.white, // 设置背景颜色
+          color: bgColor ?? Colors.white, // 设置背景颜色
         ),
 
         // 导航栏主体
@@ -69,7 +69,7 @@ class HeaderBar extends ConsumerWidget {
           // - boxShadow: 阴影效果
           // - image: 背景图片
           decoration: BoxDecoration(
-            color: Colors.white, // 背景颜色
+            color: bgColor ?? Colors.white, // 背景颜色
             border: borderShow == true
                 ? Border(
                     bottom: BorderSide(

@@ -83,6 +83,7 @@ class WordsHeader extends StatelessWidget {
                 onTap: () {
                   print('排名被点击了');
                   // 在这里添加排名点击的处理逻辑
+                  context.push('/ranking'); // 跳转到反馈页面
                 },
                 child: Container(
                   height: 35,

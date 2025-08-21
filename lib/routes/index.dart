@@ -11,6 +11,7 @@ import '../views/common/error_page_404.dart';
 import '../views/course/detail.dart';
 import '../views/books/books_page.dart';
 import '../views/feedback/feedback_page.dart';
+import '../views/ranking/ranking_page.dart';
 
 // 路由列表 - 定义所有应用路由
 // 类似于Vue Router的routes数组，但Flutter使用GoRoute对象
@@ -43,6 +44,14 @@ final List<GoRoute> routes = [
     path: '/feedback',
     builder: (context, state) {
       return FeedbackPage();
+    },
+  ),
+
+  // 排行榜
+  GoRoute(
+    path: '/ranking',
+    builder: (context, state) {
+      return RankingPage();
     },
   ),
 ];
