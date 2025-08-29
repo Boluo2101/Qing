@@ -71,6 +71,7 @@ class Tabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // 可滚动的标签栏
         Container(

@@ -92,9 +92,11 @@ class _MinePageState extends State<MinePage> {
                   // Avatar , Username
                   CircleAvatar(
                     radius: 30.0,
-                    backgroundImage: AssetImage('assets/images/servers.gif'),
+                    backgroundImage: NetworkImage(
+                      'https://testingbot.com/free-online-tools/random-avatar/200',
+                    ),
                   ),
-                  SizedBox(width: 10.0),
+                  SizedBox(width: 16.0),
                   Expanded(
                     child: Row(
                       children: [

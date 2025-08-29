@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 // Components
 import '../../components/header_bar.dart';
+import '../../components/tabs.dart';
 
 class RankingPage extends StatelessWidget {
   RankingPage({super.key});
@@ -119,6 +120,8 @@ class RankingPage extends StatelessWidget {
     },
   ];
 
+  int tabIndex = 0; // 当前选中的标签索引
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -182,12 +185,18 @@ class RankingPage extends StatelessWidget {
                       color: Colors.grey[300], // 背景色
                       borderRadius: BorderRadius.circular(20), // 圆角半径
                     ),
-                    child: Text(
-                      ' 我的学习统计 ',
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        color: Color(0xFF144ee6),
-                        fontWeight: FontWeight.bold,
+                    child: GestureDetector(
+                      onTap: () {
+                        // 在这里添加修改逻辑
+                        GoRouter.of(context).push('/statistics');
+                      },
+                      child: Text(
+                        ' 我的学习统计 ',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Color(0xFF144ee6),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
