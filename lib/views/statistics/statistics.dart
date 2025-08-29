@@ -117,6 +117,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
   Widget _buildHistoryList() {
     return ListView.builder(
       itemCount: users.length, // +1 for the image
+      padding: const EdgeInsets.only(top: 16.0),
       itemBuilder: (context, index) {
         final item = users[index];
 
