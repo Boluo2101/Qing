@@ -7,6 +7,9 @@ import 'package:go_router/go_router.dart';
 // Components
 import '../../components/header_bar.dart';
 import '../../components/tabs.dart';
+import './bar.dart';
+import './radar.dart';
+import './pie.dart';
 
 String getMonthEnStrByInt(int month) {
   const monthNames = [
@@ -235,17 +238,47 @@ class _StatisticsPageState extends State<StatisticsPage> {
     );
   }
 
-  Widget _buildCharts() {
+  Widget _buildCardWithTitle(String title, Widget child, String infoText) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+      ),
+      margin: const EdgeInsets.fromLTRB(16.0, 16, 16.0, 0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(title, style: TextStyle(fontSize: 14.0)),
+
+                Expanded(
+                  child: Text(
+                    infoText,
+                    style: TextStyle(fontSize: 14.0),
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ],
+            ),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCharts() {
+    return SingleChildScrollView(
+      padding: EdgeInsets.only(bottom: 16),
       child: Column(
         children: [
-          Text(
-            '学习时长统计',
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 16.0),
-          // 在这里添加图表组件
+          _buildCardWithTitle('阅读时长分布', TotalBarChart(), ''),
+          _buildCardWithTitle('偏好阅读科幻小说', CategoryRadarChart(), ''),
+          _buildCardWithTitle('偏好深夜阅读', TotalBarChart(), ''),
+          _buildCardWithTitle('书籍分布', PieChartDemo(), '累计阅读220本'),
         ],
       ),
     );
