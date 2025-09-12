@@ -13,8 +13,6 @@ class PieChartWidget extends StatefulWidget {
 }
 
 class _PieChartWidgetState extends State<PieChartWidget> {
-  int touchedIndex = -1;
-
   @override
   Widget build(BuildContext context) {
     final centerSpaceRadius = 40.0;
@@ -34,18 +32,7 @@ class _PieChartWidgetState extends State<PieChartWidget> {
                 sectionsSpace: 2,
                 centerSpaceRadius: centerSpaceRadius,
                 pieTouchData: PieTouchData(
-                  touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                    setState(() {
-                      if (!event.isInterestedForInteractions ||
-                          pieTouchResponse == null ||
-                          pieTouchResponse.touchedSection == null) {
-                        touchedIndex = -1;
-                        return;
-                      }
-                      touchedIndex =
-                          pieTouchResponse.touchedSection!.touchedSectionIndex;
-                    });
-                  },
+                  touchCallback: (FlTouchEvent event, pieTouchResponse) {},
                 ),
               ),
             ),
@@ -57,7 +44,6 @@ class _PieChartWidgetState extends State<PieChartWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: List.generate(widget.data.length, (i) {
               final item = widget.data[i];
-              final isTouched = i == touchedIndex;
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Row(
@@ -68,18 +54,13 @@ class _PieChartWidgetState extends State<PieChartWidget> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: item.color,
-                        border: isTouched
-                            ? Border.all(color: Colors.black, width: 2)
-                            : null,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       '${item.label} (${item.value.toInt()})',
                       style: TextStyle(
-                        fontWeight: isTouched
-                            ? FontWeight.bold
-                            : FontWeight.normal,
+                        fontWeight: FontWeight.normal,
                         fontSize: 12,
                         color: item.color,
                       ),
@@ -96,8 +77,7 @@ class _PieChartWidgetState extends State<PieChartWidget> {
 
   List<PieChartSectionData> _showingSections() {
     return List.generate(widget.data.length, (i) {
-      final isTouched = i == touchedIndex;
-      final radius = isTouched ? 60.0 : 50.0;
+      final radius = 50.0;
       final item = widget.data[i];
       return PieChartSectionData(
         color: item.color,
@@ -121,10 +101,10 @@ class PieData {
 // mock 数据示例
 final List<PieData> mockPieData = [
   PieData(label: '神作', value: 30, color: Colors.red[500]!),
-  PieData(label: '好评如潮', value: 20, color: Colors.red[400]!),
-  PieData(label: '褒贬不一', value: 20, color: Color.fromARGB(200, 20, 80, 230)),
-  PieData(label: '值得一读', value: 15, color: Color.fromARGB(200, 20, 80, 230)),
-  PieData(label: '脍炙人口', value: 10, color: Color.fromARGB(200, 20, 80, 230)),
+  PieData(label: '好评如潮', value: 20, color: Colors.deepOrange),
+  PieData(label: '褒贬不一', value: 20, color: Color.fromARGB(255, 20, 80, 230)),
+  PieData(label: '值得一读', value: 15, color: Color.fromARGB(255, 20, 80, 230)),
+  PieData(label: '脍炙人口', value: 10, color: Color.fromARGB(255, 20, 80, 230)),
   PieData(label: '不值一读', value: 5, color: Colors.grey[500]!),
 ];
 

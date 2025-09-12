@@ -34,6 +34,7 @@ import 'views/common/error_page_404.dart';
 import 'views/words/words_page.dart';
 import 'views/game/game_car_page.dart';
 import 'views/mine/mine_page.dart';
+import 'views/car/car_page.dart';
 
 // Routes - 路由配置
 // 使用命名空间导入，避免命名冲突，类似于Vue的模块化导入
@@ -173,9 +174,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/store',
       pageBuilder: (context, state) {
-        return NoTransitionPage(
-          child: PageWithBottomNavBar(child: const NotFoundPage()),
-        );
+        return NoTransitionPage(child: PageWithBottomNavBar(child: CarPage()));
       },
     ),
 

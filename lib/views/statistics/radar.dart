@@ -19,7 +19,7 @@ class CategoryRadarChart extends StatelessWidget {
   ];
 
   final List<double> values = [
-    15, 8, 5, 7, 9, 4, 8, 6, // mock 数据
+    10, 8, 5, 7, 9, 4, 8, 6, // mock 数据
   ];
 
   @override
@@ -27,21 +27,20 @@ class CategoryRadarChart extends StatelessWidget {
     return SizedBox(
       height: height,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(0, 24, 0, 16),
         child: RadarChart(
           RadarChartData(
-            radarBorderData: BorderSide(color: color, width: 1),
+            radarBorderData: BorderSide(color: color, width: 2),
             tickBorderData: BorderSide(color: Colors.grey[300]!, width: 1),
             dataSets: [
               RadarDataSet(
                 fillColor: color.withOpacity(0.5),
                 borderColor: color,
-                entryRadius: 2,
+                entryRadius: 5,
                 dataEntries: values.map((v) => RadarEntry(value: v)).toList(),
               ),
             ],
             radarBackgroundColor: Colors.grey[200],
-            tickCount: 4,
             titleTextStyle: TextStyle(fontSize: 12, color: Colors.black),
             getTitle: (index, angle) {
               return RadarChartTitle(text: categories[index]);

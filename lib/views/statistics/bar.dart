@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 class TotalBarChart extends StatelessWidget {
   final double height;
@@ -21,6 +22,7 @@ class TotalBarChart extends StatelessWidget {
     40,
     38,
   ]; // mock 数据
+  double get maxY => values.reduce((a, b) => math.max(a, b));
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class TotalBarChart extends StatelessWidget {
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,
-          maxY: 45,
+          maxY: maxY + 5,
           barTouchData: BarTouchData(enabled: false),
           gridData: FlGridData(show: false),
           titlesData: FlTitlesData(
@@ -59,7 +61,7 @@ class TotalBarChart extends StatelessWidget {
                 BarChartRodData(
                   toY: values[i],
                   color: color,
-                  width: 18,
+                  width: 12,
                   borderRadius: BorderRadius.circular(20),
                 ),
               ],
