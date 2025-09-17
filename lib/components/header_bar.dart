@@ -13,6 +13,8 @@ class HeaderBar extends ConsumerWidget {
   final List<Widget> rightActions; // 右侧操作按钮列表，类似于Vue的右侧插槽
   final Color? bgColor; // 背景色，可选属性，类似于Vue的backgroundColor prop
   final bool? borderShow;
+  final double? leftWidth;
+  final double? rightWidth;
 
   // 构造函数 - required确保必传参数
   const HeaderBar({
@@ -22,6 +24,8 @@ class HeaderBar extends ConsumerWidget {
     required this.leftActions, // 必传的左侧操作列表
     required this.rightActions, // 必传的右侧操作列表
     this.borderShow = true, // 是否显示底部分割线，默认true
+    this.leftWidth = 100, // 左侧区域宽度，默认100
+    this.rightWidth = 100, // 右侧区域宽度，默认100
   });
 
   @override
@@ -97,7 +101,7 @@ class HeaderBar extends ConsumerWidget {
               // - height: 高度
               // - child: 子组件
               SizedBox(
-                width: 100, // 固定宽度
+                width: leftWidth ?? 100, // 固定宽度
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start, // 左对齐
                   children: leftActions, // 左侧操作按钮列表
@@ -108,32 +112,33 @@ class HeaderBar extends ConsumerWidget {
               // Expanded常用属性：
               // - flex: 弹性系数，类似于CSS的flex-grow
               // - child: 子组件，必需属性
-              Expanded(
-                flex: 1, // 弹性系数
-                child: Text(
-                  title, // 标题文本
-                  // TextStyle - 文本样式配置
-                  // 类似于Vue中的文本样式对象
-                  // TextStyle常用属性：
-                  // - fontSize: 字体大小
-                  // - fontWeight: 字体粗细(normal/bold等)
-                  // - color: 文字颜色
-                  // - fontFamily: 字体族
-                  // - letterSpacing: 字母间距
-                  // - height: 行高
-                  // - decoration: 文本装饰(underline等)
-                  style: TextStyle(
-                    fontSize: 16, // 字体大小
-                    fontWeight: FontWeight.w600, // 字体粗细
-                    color: Colors.black, // 文字颜色
+              if (title.isNotEmpty)
+                Expanded(
+                  flex: 1, // 弹性系数
+                  child: Text(
+                    title, // 标题文本
+                    // TextStyle - 文本样式配置
+                    // 类似于Vue中的文本样式对象
+                    // TextStyle常用属性：
+                    // - fontSize: 字体大小
+                    // - fontWeight: 字体粗细(normal/bold等)
+                    // - color: 文字颜色
+                    // - fontFamily: 字体族
+                    // - letterSpacing: 字母间距
+                    // - height: 行高
+                    // - decoration: 文本装饰(underline等)
+                    style: TextStyle(
+                      fontSize: 16, // 字体大小
+                      fontWeight: FontWeight.w600, // 字体粗细
+                      color: Colors.black, // 文字颜色
+                    ),
+                    textAlign: TextAlign.center, // 文本对齐方式
                   ),
-                  textAlign: TextAlign.center, // 文本对齐方式
                 ),
-              ),
 
               // 右侧区域 - 固定宽度确保标题居中
               SizedBox(
-                width: 100, // 固定宽度
+                width: rightWidth ?? 100, // 固定宽度
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end, // 右对齐
                   children: rightActions, // 右侧操作按钮列表
