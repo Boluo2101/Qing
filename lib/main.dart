@@ -35,6 +35,7 @@ import 'views/words/words_page.dart';
 import 'views/game/game_car_page.dart';
 import 'views/mine/mine_page.dart';
 import 'views/car/car_page.dart';
+import 'views/music/music_page.dart';
 
 // Routes - 路由配置
 // 使用命名空间导入，避免命名冲突，类似于Vue的模块化导入
@@ -155,7 +156,7 @@ final GoRouter router = GoRouter(
         return NoTransitionPage(
           // PageWithBottomNavBar - 带底部导航的页面布局
           // 这是一个布局组件，类似于Vue中的Layout组件
-          child: PageWithBottomNavBar(child: const NotFoundPage()),
+          child: PageWithBottomNavBar(child: const MusicPage()),
         );
       },
     ),
