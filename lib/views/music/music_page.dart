@@ -2,12 +2,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../tools/custom_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../tools/color_extractor.dart';
 
 // Routers
 import 'package:go_router/go_router.dart';
-
-import '../../providers/books.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MusicPage extends ConsumerStatefulWidget {
   const MusicPage({super.key});
@@ -17,7 +16,42 @@ class MusicPage extends ConsumerStatefulWidget {
 }
 
 class _MusicPageState extends ConsumerState<MusicPage> {
+  final List<Map<String, dynamic>> musicList = [
+    {
+      'title': '我们活着',
+      'key': '1',
+      'author': '刘牧',
+      'cover': 'https://testingbot.com/free-online-tools/random-avatar/400',
+    },
+    {
+      'title': '光辉岁月',
+      'key': '2',
+      'author': 'Beyond',
+      'cover': 'https://testingbot.com/free-online-tools/random-avatar/500',
+    },
+    {
+      'title': '海阔天空',
+      'key': '3',
+      'author': 'Beyond',
+      'cover': 'https://testingbot.com/free-online-tools/random-avatar/300',
+    },
+    {
+      'title': '喜欢你',
+      'key': '4',
+      'author': 'Beyond',
+      'cover': 'https://testingbot.com/free-online-tools/random-avatar/700',
+    },
+  ];
+
+  String keyActive = '1'; // 当前激活的音乐key
+  Map<String, dynamic> musicActive = {
+    'title': '我们活着',
+    'key': '1',
+    'author': '刘牧',
+    'cover': 'https://testingbot.com/free-online-tools/random-avatar/400',
+  }; // 当前激活的音乐
   Color mainColor = CustomColors.getColorByStr('yellow');
+  bool playing = false; // 是否播放中
   int colorIndex = 0; // mainColor 在渐变数组中的位置
   Timer? _timer;
 
@@ -50,11 +84,56 @@ class _MusicPageState extends ConsumerState<MusicPage> {
   @override
   void initState() {
     super.initState();
+
+    // 初始化定时器
     _timer = Timer.periodic(Duration(seconds: 3), (timer) {
       setState(() {
         colorIndex = (colorIndex + 1) % gradientAlignments.length; // 0~4
       });
     });
+
+    // 初始化激活的歌曲
+    musicActive = musicList.firstWhere((item) => item['key'] == keyActive);
+
+    // 提取主色调
+    getAndSetMainColor();
+  }
+
+  bool changePlaying() {
+    setState(() {
+      playing = !playing;
+    });
+    return playing;
+  }
+
+  void getAndSetMainColor() async {
+    Color? color = await ColorExtractor.getMainColor(musicActive['cover']);
+    if (color != null) {
+      setState(() {
+        mainColor = color;
+      });
+    }
+  }
+
+  void changeMusicActive(String type) {
+    // type: pre / next
+    int totalIndex = musicList.length;
+    int currentIndex = musicList.indexWhere(
+      (item) => item['key'] == musicActive['key'],
+    );
+
+    if (type == 'pre') {
+      currentIndex = (currentIndex - 1 + totalIndex) % totalIndex;
+    } else if (type == 'next') {
+      currentIndex = (currentIndex + 1) % totalIndex;
+    }
+
+    musicActive = musicList[currentIndex];
+
+    playing = true; // 切歌后自动播放
+
+    // 提取主色调
+    getAndSetMainColor();
   }
 
   @override
@@ -202,7 +281,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       right: 0,
       child: Center(
         // 配合 Center 实现水平居中
-        child: Container(
+        child: SizedBox(
           height: 120,
           // color: Colors.blue,
           child: Row(
@@ -226,22 +305,25 @@ class _MusicPageState extends ConsumerState<MusicPage> {
                 icon: Icon(Icons.skip_previous, color: Colors.black, size: 30),
                 onPressed: () {
                   // 上一个
+                  changeMusicActive('pre');
                 },
               ),
               IconButton(
                 icon: Icon(
-                  Icons.play_circle_outlined,
+                  playing ? Icons.pause_circle_sharp : Icons.play_circle_sharp,
                   color: Colors.black,
                   size: 70,
                 ),
                 onPressed: () {
                   // 播放/暂停
+                  changePlaying();
                 },
               ),
               IconButton(
                 icon: Icon(Icons.skip_next, color: Colors.black, size: 30),
                 onPressed: () {
                   // 下一个
+                  changeMusicActive('next');
                 },
               ),
               IconButton(
@@ -283,9 +365,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
                   ),
                 ],
                 image: DecorationImage(
-                  image: NetworkImage(
-                    'https://testingbot.com/free-online-tools/random-avatar/400',
-                  ),
+                  image: NetworkImage(musicActive['cover']),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -298,7 +378,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '我们活着',
+                musicActive['title'],
                 style: TextStyle(
                   color: Colors.black87,
                   fontSize: 24,
@@ -319,7 +399,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                '刘牧',
+                musicActive['author'],
                 style: TextStyle(
                   color: Colors.black54,
                   fontSize: 14,
