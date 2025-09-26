@@ -143,7 +143,6 @@ class WordsHeader extends StatelessWidget {
                   IconButton(
                     icon: Icon(Icons.mail_outline_sharp, color: textColor),
                     onPressed: () {
-                      print('消息被点击了');
                       // Jump to feedback
                       // context.push('/feedback'); // 跳转到反馈页面
                       context.push('/music'); // 跳转到音乐页面

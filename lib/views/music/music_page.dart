@@ -20,24 +20,28 @@ class _MusicPageState extends ConsumerState<MusicPage> {
     {
       'title': '我们活着',
       'key': '1',
+      'minutes': 249,
       'author': '刘牧',
       'cover': 'https://testingbot.com/free-online-tools/random-avatar/400',
     },
     {
       'title': '光辉岁月',
       'key': '2',
+      'minutes': 349,
       'author': 'Beyond',
       'cover': 'https://testingbot.com/free-online-tools/random-avatar/500',
     },
     {
       'title': '海阔天空',
       'key': '3',
+      'minutes': 239,
       'author': 'Beyond',
-      'cover': 'https://testingbot.com/free-online-tools/random-avatar/300',
+      'cover': 'https://testingbot.com/free-online-tools/random-avatar/900',
     },
     {
       'title': '喜欢你',
       'key': '4',
+      'minutes': 229,
       'author': 'Beyond',
       'cover': 'https://testingbot.com/free-online-tools/random-avatar/700',
     },
@@ -47,13 +51,18 @@ class _MusicPageState extends ConsumerState<MusicPage> {
   Map<String, dynamic> musicActive = {
     'title': '我们活着',
     'key': '1',
+    'minutes': 209,
     'author': '刘牧',
     'cover': 'https://testingbot.com/free-online-tools/random-avatar/400',
   }; // 当前激活的音乐
   Color mainColor = CustomColors.getColorByStr('yellow');
   bool playing = false; // 是否播放中
+  String totalMinutes = '0:00'; // 总时长
+  int currentSeconds = 0; // 当前秒数
+
   int colorIndex = 0; // mainColor 在渐变数组中的位置
   Timer? _timer;
+  Timer? _progressTimer; // 新增：进度条定时器
 
   // 渐变方向数组
   final List<List<Alignment>> gradientAlignments = [
@@ -85,7 +94,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
   void initState() {
     super.initState();
 
-    // 初始化定时器
+    // 初始化渐变定时器
     _timer = Timer.periodic(Duration(seconds: 3), (timer) {
       setState(() {
         colorIndex = (colorIndex + 1) % gradientAlignments.length; // 0~4
@@ -97,11 +106,54 @@ class _MusicPageState extends ConsumerState<MusicPage> {
 
     // 提取主色调
     getAndSetMainColor();
+    totalMinutes = secondsToMinutes(musicActive['minutes']);
+
+    // 初始化进度条定时器
+    _startProgressTimer();
   }
 
-  bool changePlaying() {
+  // 新增：启动进度条定时器
+  void _startProgressTimer() {
+    _progressTimer?.cancel();
+    if (playing) {
+      _progressTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        if (!playing) {
+          timer.cancel();
+          return;
+        }
+        setState(() {
+          currentSeconds++;
+          int totalSeconds = (musicActive['minutes']);
+          if (currentSeconds >= totalSeconds) {
+            currentSeconds = totalSeconds;
+            playing = false;
+            timer.cancel();
+          }
+        });
+      });
+    }
+  }
+
+  // 新增：停止进度条定时器
+  void _stopProgressTimer() {
+    _progressTimer?.cancel();
+  }
+
+  // 秒转分钟
+  String secondsToMinutes(int totalSeconds) {
+    int minutes = totalSeconds ~/ 60;
+    int seconds = totalSeconds % 60;
+    return '$minutes:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  bool changePlaying(bool status) {
     setState(() {
-      playing = !playing;
+      playing = status;
+      if (playing) {
+        _startProgressTimer();
+      } else {
+        _stopProgressTimer();
+      }
     });
     return playing;
   }
@@ -129,16 +181,22 @@ class _MusicPageState extends ConsumerState<MusicPage> {
     }
 
     musicActive = musicList[currentIndex];
+    totalMinutes = secondsToMinutes(musicActive['minutes']);
+    currentSeconds = 0;
 
     playing = true; // 切歌后自动播放
 
     // 提取主色调
     getAndSetMainColor();
+
+    // 切歌后重启进度条定时器
+    _startProgressTimer();
   }
 
   @override
   void dispose() {
     _timer?.cancel();
+    _progressTimer?.cancel(); // 新增：释放进度条定时器
     super.dispose();
   }
 
@@ -219,36 +277,84 @@ class _MusicPageState extends ConsumerState<MusicPage> {
 
   // 进度条
   Widget _buildProgressBar() {
+    int totalSeconds = musicActive['minutes'];
+    double progress = totalSeconds == 0 ? 0 : currentSeconds / totalSeconds;
+    progress = progress.clamp(0.0, 1.0);
+
     return Positioned(
       bottom: 110, //
       left: 20,
       right: 20,
       child: Column(
         children: [
-          Container(
-            width: double.infinity,
-            height: 4,
-            decoration: BoxDecoration(
-              color: Colors.grey[300], // 背景色，半透明白色
-              borderRadius: BorderRadius.circular(2), // 圆角
-            ),
-            child: FractionallySizedBox(
-              alignment: Alignment.centerLeft,
-              widthFactor: 0.3, // 进度条宽度占比，30%
-              child: Container(
-                decoration: BoxDecoration(
-                  color: mainColor, // 进度条颜色
-                  borderRadius: BorderRadius.circular(2), // 圆角
+          LayoutBuilder(
+            builder: (context, constraints) {
+              double barWidth = constraints.maxWidth;
+              double dotPosition = barWidth * progress;
+              return GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTapDown: (details) {
+                  // 正确获取 barWidth
+                  double dx = details.localPosition.dx;
+                  double percent = (dx / barWidth).clamp(0.0, 1.0);
+                  int newSeconds = (percent * totalSeconds).round();
+                  setState(() {
+                    currentSeconds = newSeconds;
+                  });
+                  changePlaying(true); // 点击进度条后开始播放
+                },
+                child: Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                    // 背景条
+                    Container(
+                      width: double.infinity,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    // 进度条
+                    Container(
+                      width: barWidth * progress,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: mainColor,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    // 圆点
+                    Positioned(
+                      left: dotPosition - 8, // 8为圆点半径
+                      child: Container(
+                        width: 16,
+                        height: 16,
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          border: Border.all(color: mainColor, width: 3),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: mainColor.withOpacity(0.3),
+                              blurRadius: 4,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ),
+              );
+            },
           ),
           SizedBox(height: 14), // 间距
 
           Row(
             children: [
               Text(
-                '1:30',
+                secondsToMinutes(currentSeconds),
                 style: TextStyle(
                   color: Colors.black54,
                   fontSize: 12,
@@ -256,9 +362,9 @@ class _MusicPageState extends ConsumerState<MusicPage> {
                   decoration: TextDecoration.none,
                 ),
               ),
-              Spacer(), // 占位符，撑开空间
+              Spacer(),
               Text(
-                '4:30',
+                totalMinutes,
                 style: TextStyle(
                   color: Colors.black54,
                   fontSize: 12,
@@ -316,7 +422,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
                 ),
                 onPressed: () {
                   // 播放/暂停
-                  changePlaying();
+                  changePlaying(!playing);
                 },
               ),
               IconButton(

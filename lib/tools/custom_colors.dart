@@ -22,4 +22,13 @@ class CustomColors {
         return Colors.grey; // 默认颜色
     }
   }
+
+  static Color getColorInvert(Color color) {
+    return Color.fromARGB(
+      color.alpha,
+      255 - color.red,
+      255 - color.green,
+      255 - color.blue,
+    );
+  }
 }
