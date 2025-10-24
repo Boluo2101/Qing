@@ -22,14 +22,84 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       'key': '1',
       'minutes': 249,
       'author': '刘牧',
-      'cover': 'https://testingbot.com/free-online-tools/random-avatar/400',
+      'cover': 'https://zcy-1251113349.file.myqcloud.com/testFiles/ll.png',
+      'mainColor': Colors.yellow,
+      "lyrics": [
+        ["当世界面对死亡", 'Dang shi jie mian dui si wang'],
+        ["灵魂点燃了微光", 'Ling hun dian ran le wei guang'],
+        ["那是救赎者的妄想", 'Na shi jiu shu zhe de wang xiang'],
+        ["是末日冰冷的悲伤", 'Shi mo ri bing leng de bei shang'],
+        ["当我们面对死亡", 'Dang wo men mian dui si wang'],
+        ["我轻轻吻你的额头", 'Wo qing qing wen ni de e tou'],
+        ["温热的脸庞", 'Wen re de lian pang'],
+        ["闪烁着的眼眶", 'Shan shuo zhe de yan kuang'],
+        ["这 至暗的夜", 'Zhe zhi an de ye'],
+        ["再度被唤起的向往", 'Zai du bei huan qi de xiang wang'],
+        ["无法阻挡", 'Wu fa zu dang'],
+        ["不顾一切", 'Bu gu yi qie'],
+        ["去疯狂", 'Qu feng kuang'],
+        ["我们活着", 'Wo men huo zhe'],
+        ["告诉每一个人", 'Gao su mei yi ge ren'],
+        ["生命是多么不可想象", 'Sheng ming shi duo me bu ke xiang xiang'],
+        ["深藏着无尽顽强", 'Shen cang zhe wu jin wan qiang'],
+        ["在那一刻", 'Zai na yi ke'],
+        ["你我站在宇宙的中心", 'Ni wo zhan zai yu zhou de zhong xin'],
+        ["在那一刻", 'Zai na yi ke'],
+        ["我们忘了", 'Wo men wang le'],
+        ["抵抗", 'Di kang'],
+      ],
     },
     {
       'title': '光辉岁月',
       'key': '2',
       'minutes': 349,
       'author': 'Beyond',
-      'cover': 'https://testingbot.com/free-online-tools/random-avatar/500',
+      'cover': 'https://zcy-1251113349.file.myqcloud.com/testFiles/by.webp',
+      "lyrics": [
+        ["钟声响起归家的讯号", "zung sang hoeng hei gwai gaa dik seon hou"],
+        ["在他生命里", "zoi ta sang ming leoi"],
+        ["仿佛带点唏嘘", "fong fat daai dim hei heoi"],
+        ["黑色肌肤给他的意义", "hak sik gei fu kap ta dik ji ji"],
+        ["是一生奉献 肤色斗争中", "si jat sang fung hin fuk sik dau zang zung"],
+        ["年月把拥有变做失去", "nin jyut baa jung jau bin zou sat heoi"],
+        ["疲倦的双眼带着期望", "pei jyun dik soeng ngaan daai zhe kei mong"],
+        ["今天只有残留的躯壳", "gan tin zhi jau caan lau dik keoi hok"],
+        ["迎接光辉岁月", "jing zip gwong fai seoi jyut"],
+        ["风雨中抱紧自由", "fung jyu zung bou gan zi jau"],
+        ["一生经过彷徨的挣扎", "jat sang ging gwo pong wong dik zang za"],
+        ["自信可改变未来", "zi seon ho goi bin mei loi"],
+        ["问谁又能做到", "man seoi jau nang zou dou"],
+        ["", ""],
+        ["可否不分肤色的界限", "ho fau bat fan fuk sik dik gaai haan"],
+        ["愿这土地里", "jyun ze tou dei leoi"],
+        ["不分你我高低", "bat fan nei ngo gou dai"],
+        ["缤纷色彩闪出的美丽", "ban fan sik coi sin ceot dik mei lai"],
+        ["是因它没有", "si jan ta mut jau"],
+        ["分开每种色彩", "fan hoi mui zung sik coi"],
+        ["年月把拥有变做失去", "nin jyut baa jung jau bin zou sat heoi"],
+        ["疲倦的双眼带着期望", "pei jyun dik soeng ngaan daai zhe kei mong"],
+        ["今天只有残留的躯壳", "gan tin zhi jau caan lau dik keoi hok"],
+        ["迎接光辉岁月", "jing zip gwong fai seoi jyut"],
+        ["风雨中抱紧自由", "fung jyu zung bou gan zi jau"],
+        ["一生经过彷徨的挣扎", "jat sang ging gwo pong wong dik zang za"],
+        ["自信可改变未来", "zi seon ho goi bin mei loi"],
+        ["问谁又能做到", "man seoi jau nang zou dou"],
+        ["", ""],
+        ["今天只有残留的躯壳", "gan tin zhi jau caan lau dik keoi hok"],
+        ["迎接光辉岁月", "jing zip gwong fai seoi jyut"],
+        ["风雨中抱紧自由", "fung jyu zung bou gan zi jau"],
+        ["一生经过彷徨的挣扎", "jat sang ging gwo pong wong dik zang za"],
+        ["自信可改变未来", "zi seon ho goi bin mei loi"],
+        ["问谁又能做到", "man seoi jau nang zou dou"],
+        ["", ""],
+        ["", ""],
+        ["今天只有残留的躯壳", "gan tin zhi jau caan lau dik keoi hok"],
+        ["迎接光辉岁月", "jing zip gwong fai seoi jyut"],
+        ["风雨中抱紧自由", "fung jyu zung bou gan zi jau"],
+        ["一生经过彷徨的挣扎", "jat sang ging gwo pong wong dik zang za"],
+        ["自信可改变未来", "zi seon ho goi bin mei loi"],
+        ["问谁又能做到", "man seoi jau nang zou dou"],
+      ],
     },
     {
       'title': '海阔天空',
@@ -37,6 +107,69 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       'minutes': 239,
       'author': 'Beyond',
       'cover': 'https://testingbot.com/free-online-tools/random-avatar/900',
+      "lyrics": [
+        ["今天我 寒夜里看雪飘过", "Jin tian wo han ye li kan xue piao guo"],
+        ["怀着冷却了的心窝飘远方", "Huai zhe leng que le de xin wo piao yuan fang"],
+        ["风雨里追赶 雾里分不清影踪", "Feng yu li zhui gan wu li fen bu qing ying zong"],
+        [
+          "天空海阔你与我 可会变（谁没在变）",
+          "Tian kong hai kuo ni yu wo ke hui bian (shui mei zai bian)",
+        ],
+        ["", ""],
+        ["多少次 迎着冷眼与嘲笑", "Duo shao ci ying zhe leng yan yu chao xiao"],
+        ["从没有放弃过心中的理想", "Cong mei you fang qi guo xin zhong de li xiang"],
+        ["一刹那恍惚 若有所失的感觉", "Yi cha na huang hu ruo you suo shi de gan jue"],
+        [
+          "不知不觉已变淡 心里爱（谁明白我）",
+          "Bu zhi bu jue yi bian dan xin li ai (shui ming bai wo)",
+        ],
+        ["", ""],
+        [
+          "原谅我这一生不羁放纵爱自由",
+          "Yuan liang wo zhe yi sheng bu ji fang zong ai zi you",
+        ],
+        ["也会怕有一天会跌倒", "Ye hui pa you yi tian hui die dao"],
+        ["背弃了理想 谁人都可以", "Bei qi le li xiang shui ren dou ke yi"],
+        ["哪会怕有一天只你共我", "Na hui pa you yi tian zhi ni gong wo"],
+        ["", ""],
+        ["今天我 寒夜里看雪飘过", "Jin tian wo han ye li kan xue piao guo"],
+        ["怀着冷却了的心窝飘远方", "Huai zhe leng que le de xin wo piao yuan fang"],
+        ["风雨里追赶 雾里分不清影踪", "Feng yu li zhui gan wu li fen bu qing ying zong"],
+        [
+          "天空海阔你与我 可会变（谁没在变）",
+          "Tian kong hai kuo ni yu wo ke hui bian (shui mei zai bian)",
+        ],
+        ["", ""],
+        [
+          "原谅我这一生不羁放纵爱自由",
+          "Yuan liang wo zhe yi sheng bu ji fang zong ai zi you",
+        ],
+        ["也会怕有一天会跌倒", "Ye hui pa you yi tian hui die dao"],
+        ["背弃了理想 谁人都可以", "Bei qi le li xiang shui ren dou ke yi"],
+        ["哪会怕有一天只你共我", "Na hui pa you yi tian zhi ni gong wo"],
+        ["", ""],
+        ["仍然自由自我 永远高唱我歌", "Reng ran zi you zi wo yong yuan gao chang wo ge"],
+        ["走遍千里", "Zou bian qian li"],
+        ["", ""],
+        [
+          "原谅我这一生不羁放纵爱自由",
+          "Yuan liang wo zhe yi sheng bu ji fang zong ai zi you",
+        ],
+        ["也会怕有一天会跌倒", "Ye hui pa you yi tian hui die dao"],
+        ["背弃了理想 谁人都可以", "Bei qi le li xiang shui ren dou ke yi"],
+        ["哪会怕有一天只你共我", "Na hui pa you yi tian zhi ni gong wo"],
+        ["", ""],
+        ["背弃了理想 谁人都可以", "Bei qi le li xiang shui ren dou ke yi"],
+        ["哪会怕有一天只你共我", "Na hui pa you yi tian zhi ni gong wo"],
+        ["", ""],
+        [
+          "原谅我这一生不羁放纵爱自由",
+          "Yuan liang wo zhe yi sheng bu ji fang zong ai zi you",
+        ],
+        ["也会怕有一天会跌倒", "Ye hui pa you yi tian hui die dao"],
+        ["背弃了理想 谁人都可以", "Bei qi le li xiang shui ren dou ke yi"],
+        ["哪会怕有一天只你共我", "Na hui pa you yi tian zhi ni gong wo"],
+      ],
     },
     {
       'title': '喜欢你',
@@ -44,6 +177,50 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       'minutes': 229,
       'author': 'Beyond',
       'cover': 'https://testingbot.com/free-online-tools/random-avatar/700',
+      "lyrics": [
+        ["细雨带风湿透黄昏的街道", "xì yǔ dài fēng shī tòu huáng hūn de jiē dào"],
+        ["抹去雨水双眼无故地仰望", "mǒ qù yǔ shuǐ shuāng yǎn wú gù de yǎng wàng"],
+        ["望向孤单的晚灯", "wàng xiàng gū dān de wǎn dēng"],
+        ["是那伤感的记忆", "shì nà shāng gǎn de jì yì"],
+        ["再次泛起心里无数的思念", "zài cì fàn qǐ xīn lǐ wú shù de sī niàn"],
+        ["以往片刻欢笑仍挂在脸上", "yǐ wǎng piàn kè huān xiào réng guà zài liǎn shàng"],
+        ["愿你此刻可会知", "yuàn nǐ cǐ kè kě huì zhī"],
+        ["是我衷心的说声", "shì wǒ zhōng xīn de shuō shēng"],
+        ["", ""],
+        ["喜欢你", "xǐ huān nǐ"],
+        ["那双眼动人", "nà shuāng yǎn dòng rén"],
+        ["笑声更迷人", "xiào shēng gèng mí rén"],
+        ["愿再可 轻抚你", "yuàn zài kě qīng fǔ nǐ"],
+        ["那可爱面容", "nà kě ài miàn róng"],
+        ["挽手说梦话", "wǎn shǒu shuō mèng huà"],
+        ["像昨天 你共我", "xiàng zuó tiān nǐ gòng wǒ"],
+        ["", ""],
+        ["满带理想的我曾经多冲动", "mǎn dài lǐ xiǎng de wǒ céng jīng duō chōng dòng"],
+        ["你怨与她相爱难有自由", "nǐ yuàn yǔ tā xiāng ài nán yǒu zì yóu"],
+        ["愿你此刻可会知", "yuàn nǐ cǐ kè kě huì zhī"],
+        ["是我衷心的说声", "shì wǒ zhōng xīn de shuō shēng"],
+        ["", ""],
+        ["喜欢你", "xǐ huān nǐ"],
+        ["那双眼动人", "nà shuāng yǎn dòng rén"],
+        ["笑声更迷人", "xiào shēng gèng mí rén"],
+        ["愿再可 轻抚你", "yuàn zài kě qīng fǔ nǐ"],
+        ["那可爱面容", "nà kě ài miàn róng"],
+        ["挽手说梦话", "wǎn shǒu shuō mèng huà"],
+        ["像昨天 你共我", "xiàng zuó tiān nǐ gòng wǒ"],
+        ["", ""],
+        ["每晚夜里自我独行", "měi wǎn yè lǐ zì wǒ dú xíng"],
+        ["随处荡 多冰冷", "suí chǔ dàng duō bīng lěng"],
+        ["已往为了自我挣扎", "yǐ wǎng wèi le zì wǒ zhēng zhá"],
+        ["从不知 她的痛苦", "cóng bù zhī tā de tòng kǔ"],
+        ["", ""],
+        ["喜欢你", "xǐ huān nǐ"],
+        ["那双眼动人", "nà shuāng yǎn dòng rén"],
+        ["笑声更迷人", "xiào shēng gèng mí rén"],
+        ["愿再可 轻抚你", "yuàn zài kě qīng fǔ nǐ"],
+        ["那可爱面容", "nà kě ài miàn róng"],
+        ["挽手说梦话", "wǎn shǒu shuō mèng huà"],
+        ["像昨天 你共我", "xiàng zuó tiān nǐ gòng wǒ"],
+      ],
     },
   ];
 
@@ -54,6 +231,30 @@ class _MusicPageState extends ConsumerState<MusicPage> {
     'minutes': 209,
     'author': '刘牧',
     'cover': 'https://testingbot.com/free-online-tools/random-avatar/400',
+    "lyrics": [
+      "当世界面对死亡",
+      "灵魂点燃了微光",
+      "那是救赎者的妄想",
+      "是末日冰冷的悲伤",
+      "当我们面对死亡",
+      "我轻轻吻你的额头",
+      "温热的脸庞",
+      "闪烁着的眼眶",
+      "这 至暗的夜",
+      "再度被唤起的向往",
+      "无法阻挡",
+      "不顾一切",
+      "去疯狂",
+      "我们活着",
+      "告诉每一个人",
+      "生命是多么不可想象",
+      "深藏着无尽顽强",
+      "在那一刻",
+      "你我站在宇宙的中心",
+      "在那一刻",
+      "我们忘了",
+      "抵抗",
+    ],
   }; // 当前激活的音乐
   Color mainColor = CustomColors.getColorByStr('yellow');
   bool playing = false; // 是否播放中
@@ -63,6 +264,47 @@ class _MusicPageState extends ConsumerState<MusicPage> {
   int colorIndex = 0; // mainColor 在渐变数组中的位置
   Timer? _timer;
   Timer? _progressTimer; // 新增：进度条定时器
+
+  int indexActive = 0; // 索引指示器激活位置
+  final List<Map<String, dynamic>> subPages = [
+    {'title': '播放器', 'key': 'player', 'index': 0},
+    {'title': '歌词', 'key': 'lyrics', 'index': 1},
+  ]; // 子页面数据
+
+  // 歌词index，
+  int lyricIndex = 0;
+  final ScrollController _lyricsScrollController =
+      ScrollController(); // 新增：歌词滚动控制器
+
+  void updateLyricIndex() {
+    int totalSeconds = musicActive['minutes'];
+    double progress = totalSeconds == 0 ? 0 : currentSeconds / totalSeconds;
+    progress = progress.clamp(0.0, 1.0);
+
+    int newIndex = (progress * musicActive['lyrics'].length).floor();
+    if (newIndex != lyricIndex) {
+      lyricIndex = newIndex;
+      _scrollToLyric(); // 新增：滚动到当前歌词
+    }
+  }
+
+  // 新增：滚动到当前歌词
+  void _scrollToLyric() {
+    if (_lyricsScrollController.hasClients) {
+      double itemHeight = 56.0; // 每行歌词的高度（包括 padding）
+      double offset = itemHeight * lyricIndex - 100; // 减去偏移量让当前歌词显示在中间位置
+      offset = offset.clamp(
+        0.0,
+        _lyricsScrollController.position.maxScrollExtent,
+      );
+
+      _lyricsScrollController.animateTo(
+        offset,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
 
   // 渐变方向数组
   final List<List<Alignment>> gradientAlignments = [
@@ -129,6 +371,8 @@ class _MusicPageState extends ConsumerState<MusicPage> {
             playing = false;
             timer.cancel();
           }
+
+          updateLyricIndex();
         });
       });
     }
@@ -160,9 +404,10 @@ class _MusicPageState extends ConsumerState<MusicPage> {
 
   void getAndSetMainColor() async {
     Color? color = await ColorExtractor.getMainColor(musicActive['cover']);
+
     if (color != null) {
       setState(() {
-        mainColor = color;
+        mainColor = musicActive['mainColor'] ?? color;
       });
     }
   }
@@ -186,6 +431,9 @@ class _MusicPageState extends ConsumerState<MusicPage> {
 
     playing = true; // 切歌后自动播放
 
+    // 更新歌词索引
+    updateLyricIndex();
+
     // 提取主色调
     getAndSetMainColor();
 
@@ -193,10 +441,23 @@ class _MusicPageState extends ConsumerState<MusicPage> {
     _startProgressTimer();
   }
 
+  void changeIndexActive(int index) {
+    setState(() {
+      indexActive = index;
+    });
+  }
+
+  void changeIndexNext() {
+    setState(() {
+      indexActive = indexActive == subPages.length - 1 ? 0 : indexActive + 1;
+    });
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
     _progressTimer?.cancel(); // 新增：释放进度条定时器
+    _lyricsScrollController.dispose(); // 新增：释放歌词滚动控制器
     super.dispose();
   }
 
@@ -225,7 +486,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
               },
             ),
 
-            Expanded(child: Container()),
+            Expanded(child: _buildIndexs()),
 
             // 右侧按钮
             IconButton(
@@ -275,6 +536,30 @@ class _MusicPageState extends ConsumerState<MusicPage> {
     );
   }
 
+  // 索引指示器
+  Widget _buildIndexs() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(subPages.length, (index) {
+        bool isActive = index == indexActive;
+        return GestureDetector(
+          onTap: () {
+            changeIndexActive(index);
+          },
+          child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 4),
+            width: 15,
+            height: 3,
+            decoration: BoxDecoration(
+              color: isActive ? mainColor : Colors.grey,
+              // shape: BoxShape.circle,
+            ),
+          ),
+        );
+      }),
+    );
+  }
+
   // 进度条
   Widget _buildProgressBar() {
     int totalSeconds = musicActive['minutes'];
@@ -300,6 +585,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
                   int newSeconds = (percent * totalSeconds).round();
                   setState(() {
                     currentSeconds = newSeconds;
+                    updateLyricIndex();
                   });
                   changePlaying(true); // 点击进度条后开始播放
                 },
@@ -445,8 +731,8 @@ class _MusicPageState extends ConsumerState<MusicPage> {
     );
   }
 
-  // 主体内容
-  Widget _buildBody() {
+  // 播放器子页面
+  Widget _buildPlayerSubPage() {
     return Positioned.fill(
       top: 100,
       bottom: 250,
@@ -457,22 +743,27 @@ class _MusicPageState extends ConsumerState<MusicPage> {
           // 封面
           AspectRatio(
             aspectRatio: 1.0, // 宽高比 1:1（正方形）
-            child: Container(
-              width: double.infinity,
-              height: 300,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 16,
-                    offset: Offset(0, 0),
+            child: GestureDetector(
+              onTap: () {
+                changeIndexNext();
+              },
+              child: Container(
+                width: double.infinity,
+                height: 300,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 16,
+                      offset: Offset(0, 0),
+                    ),
+                  ],
+                  image: DecorationImage(
+                    image: NetworkImage(musicActive['cover']),
+                    fit: BoxFit.cover,
                   ),
-                ],
-                image: DecorationImage(
-                  image: NetworkImage(musicActive['cover']),
-                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -524,6 +815,122 @@ class _MusicPageState extends ConsumerState<MusicPage> {
           ),
         ],
       ),
+    );
+  }
+
+  // 歌词页子页面
+  Widget _buildLyricsSubPage() {
+    return Positioned.fill(
+      top: 100,
+      bottom: 250,
+      left: 20,
+      right: 20,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // 歌曲名
+          Text(
+            musicActive['title'],
+            style: TextStyle(
+              color: Colors.black87,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.none,
+            ),
+          ),
+          SizedBox(height: 6), // 间距
+          // 作者
+          Text(
+            musicActive['author'],
+            style: TextStyle(
+              color: Colors.black87,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              decoration: TextDecoration.none,
+            ),
+          ),
+          SizedBox(height: 30), // 间距
+
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(0),
+              decoration: BoxDecoration(
+                // color: Colors.white.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(0),
+              ),
+              child: SingleChildScrollView(
+                controller: _lyricsScrollController, // 新增：关联滚动控制器
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: (musicActive['lyrics'] as List<dynamic>)
+                      .asMap()
+                      .entries
+                      .map<Widget>((entry) {
+                        int index = entry.key; // 索引
+                        String line = entry.value[0]; // 歌词内容
+                        String pinyin = entry.value.length > 1
+                            ? entry.value[1]
+                            : '';
+                        bool isActive = index == lyricIndex;
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (line.isNotEmpty)
+                                Text(
+                                  line,
+                                  style: TextStyle(
+                                    color: isActive
+                                        ? mainColor
+                                        : Colors.black54,
+                                    fontSize: isActive ? 22.0 : 16.0,
+                                    fontWeight: isActive
+                                        ? FontWeight.bold
+                                        : FontWeight.w400,
+                                    decoration: TextDecoration.none,
+                                  ),
+                                ),
+                              if (pinyin.isNotEmpty) SizedBox(height: 4),
+                              if (pinyin.isNotEmpty)
+                                Text(
+                                  pinyin,
+                                  style: TextStyle(
+                                    color: isActive
+                                        ? mainColor.withOpacity(0.7)
+                                        : Colors.black38,
+                                    fontSize: isActive ? 18.0 : 12.0,
+                                    fontWeight: isActive
+                                        ? FontWeight.w500
+                                        : FontWeight.w300,
+                                    decoration: TextDecoration.none,
+                                  ),
+                                ),
+                              SizedBox(height: 10),
+                            ],
+                          ),
+                        );
+                      })
+                      .toList(),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 主体内容
+  Widget _buildBody() {
+    // 根据 indexActive 显示不同子页面
+    return Stack(
+      children: [
+        if (indexActive == 0) _buildPlayerSubPage(),
+        if (indexActive == 1) _buildLyricsSubPage(),
+      ],
     );
   }
 
