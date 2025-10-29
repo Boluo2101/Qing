@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../tools/custom_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../tools/color_extractor.dart';
+import 'package:just_audio/just_audio.dart';
 
 // Routers
 import 'package:go_router/go_router.dart';
@@ -23,6 +24,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       'minutes': 249,
       'author': '刘牧',
       'cover': 'https://zcy-1251113349.file.myqcloud.com/testFiles/ll.png',
+      'audio': 'https://zcy-1251113349.file.myqcloud.com/testFiles/lyy.mp3',
       'mainColor': Colors.yellow,
       "lyrics": [
         ["当世界面对死亡", 'Dang shi jie mian dui si wang'],
@@ -55,6 +57,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       'minutes': 349,
       'author': 'Beyond',
       'cover': 'https://zcy-1251113349.file.myqcloud.com/testFiles/by.webp',
+      'audio': 'https://zcy-1251113349.file.myqcloud.com/testFiles/ghsy.mp3',
       "lyrics": [
         ["钟声响起归家的讯号", "zung sang hoeng hei gwai gaa dik seon hou"],
         ["在他生命里", "zoi ta sang ming leoi"],
@@ -107,6 +110,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       'minutes': 239,
       'author': 'Beyond',
       'cover': 'https://testingbot.com/free-online-tools/random-avatar/900',
+      'audio': 'https://zcy-1251113349.file.myqcloud.com/testFiles/lyy.mp3',
       "lyrics": [
         ["今天我 寒夜里看雪飘过", "Jin tian wo han ye li kan xue piao guo"],
         ["怀着冷却了的心窝飘远方", "Huai zhe leng que le de xin wo piao yuan fang"],
@@ -177,6 +181,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       'minutes': 229,
       'author': 'Beyond',
       'cover': 'https://testingbot.com/free-online-tools/random-avatar/700',
+      'audio': 'https://zcy-1251113349.file.myqcloud.com/testFiles/ghsy.mp3',
       "lyrics": [
         ["细雨带风湿透黄昏的街道", "xì yǔ dài fēng shī tòu huáng hūn de jiē dào"],
         ["抹去雨水双眼无故地仰望", "mǒ qù yǔ shuǐ shuāng yǎn wú gù de yǎng wàng"],
@@ -231,6 +236,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
     'minutes': 209,
     'author': '刘牧',
     'cover': 'https://testingbot.com/free-online-tools/random-avatar/400',
+    'audio': 'https://zcy-1251113349.file.myqcloud.com/testFiles/lyy.mp3',
     "lyrics": [
       "当世界面对死亡",
       "灵魂点燃了微光",
@@ -271,12 +277,22 @@ class _MusicPageState extends ConsumerState<MusicPage> {
     {'title': '歌词', 'key': 'lyrics', 'index': 1},
   ]; // 子页面数据
 
+  // 播放器
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
   // 歌词index，
   int lyricIndex = 0;
   final ScrollController _lyricsScrollController =
       ScrollController(); // 新增：歌词滚动控制器
 
-  void updateLyricIndex() {
+  // 更新歌词索引
+  void updateLyricIndex(int? index) {
+    if (index != null) {
+      lyricIndex = index;
+      _scrollToLyric(); // 新增：滚动到当前歌词
+      return;
+    }
+
     int totalSeconds = musicActive['minutes'];
     double progress = totalSeconds == 0 ? 0 : currentSeconds / totalSeconds;
     progress = progress.clamp(0.0, 1.0);
@@ -286,6 +302,14 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       lyricIndex = newIndex;
       _scrollToLyric(); // 新增：滚动到当前歌词
     }
+  }
+
+  // 更新播放器位置
+  void updateAudioPosition(int newSeconds) {
+    print('Updating audio position to $newSeconds seconds');
+    setState(() {
+      _audioPlayer.seek(Duration(seconds: newSeconds));
+    });
   }
 
   // 新增：滚动到当前歌词
@@ -352,6 +376,19 @@ class _MusicPageState extends ConsumerState<MusicPage> {
 
     // 初始化进度条定时器
     _startProgressTimer();
+
+    // 设置播放器Url
+    _setAudioSource(musicActive['audio']);
+  }
+
+  // 设置播放器音频源
+  void _setAudioSource(String url) async {
+    print('Setting audio source: $url');
+    try {
+      await _audioPlayer.setUrl(url);
+    } catch (e) {
+      print("Error loading audio source: $e");
+    }
   }
 
   // 新增：启动进度条定时器
@@ -372,7 +409,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
             timer.cancel();
           }
 
-          updateLyricIndex();
+          updateLyricIndex(null);
         });
       });
     }
@@ -395,8 +432,10 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       playing = status;
       if (playing) {
         _startProgressTimer();
+        _audioPlayer.play();
       } else {
         _stopProgressTimer();
+        _audioPlayer.pause();
       }
     });
     return playing;
@@ -431,8 +470,11 @@ class _MusicPageState extends ConsumerState<MusicPage> {
 
     playing = true; // 切歌后自动播放
 
+    // 设置播放器Url
+    _setAudioSource(musicActive['audio']);
+
     // 更新歌词索引
-    updateLyricIndex();
+    updateLyricIndex(null);
 
     // 提取主色调
     getAndSetMainColor();
@@ -458,6 +500,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
     _timer?.cancel();
     _progressTimer?.cancel(); // 新增：释放进度条定时器
     _lyricsScrollController.dispose(); // 新增：释放歌词滚动控制器
+    _audioPlayer.dispose(); // 释放播放器
     super.dispose();
   }
 
@@ -585,7 +628,8 @@ class _MusicPageState extends ConsumerState<MusicPage> {
                   int newSeconds = (percent * totalSeconds).round();
                   setState(() {
                     currentSeconds = newSeconds;
-                    updateLyricIndex();
+                    updateLyricIndex(null);
+                    updateAudioPosition(newSeconds);
                   });
                   changePlaying(true); // 点击进度条后开始播放
                 },
@@ -874,42 +918,58 @@ class _MusicPageState extends ConsumerState<MusicPage> {
                             ? entry.value[1]
                             : '';
                         bool isActive = index == lyricIndex;
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (line.isNotEmpty)
-                                Text(
-                                  line,
-                                  style: TextStyle(
-                                    color: isActive
-                                        ? mainColor
-                                        : Colors.black54,
-                                    fontSize: isActive ? 22.0 : 16.0,
-                                    fontWeight: isActive
-                                        ? FontWeight.bold
-                                        : FontWeight.w400,
-                                    decoration: TextDecoration.none,
+                        return GestureDetector(
+                          onTap: () {
+                            // 点击歌词行，根据lyricIndex计算秒数并更新播放器位置
+                            int totalSeconds = musicActive['minutes'];
+                            double percent =
+                                index /
+                                (musicActive['lyrics'] as List<dynamic>).length;
+                            int newSeconds = (percent * totalSeconds).round();
+                            setState(() {
+                              currentSeconds = newSeconds;
+                              updateLyricIndex(index);
+                              updateAudioPosition(newSeconds);
+                            });
+                            changePlaying(true); // 点击歌词后开始播放
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (line.isNotEmpty)
+                                  Text(
+                                    line,
+                                    style: TextStyle(
+                                      color: isActive
+                                          ? mainColor
+                                          : Colors.black54,
+                                      fontSize: isActive ? 22.0 : 16.0,
+                                      fontWeight: isActive
+                                          ? FontWeight.bold
+                                          : FontWeight.w400,
+                                      decoration: TextDecoration.none,
+                                    ),
                                   ),
-                                ),
-                              if (pinyin.isNotEmpty) SizedBox(height: 4),
-                              if (pinyin.isNotEmpty)
-                                Text(
-                                  pinyin,
-                                  style: TextStyle(
-                                    color: isActive
-                                        ? mainColor.withOpacity(0.7)
-                                        : Colors.black38,
-                                    fontSize: isActive ? 18.0 : 12.0,
-                                    fontWeight: isActive
-                                        ? FontWeight.w500
-                                        : FontWeight.w300,
-                                    decoration: TextDecoration.none,
+                                if (pinyin.isNotEmpty) SizedBox(height: 4),
+                                if (pinyin.isNotEmpty)
+                                  Text(
+                                    pinyin,
+                                    style: TextStyle(
+                                      color: isActive
+                                          ? mainColor.withOpacity(0.7)
+                                          : Colors.black38,
+                                      fontSize: isActive ? 18.0 : 12.0,
+                                      fontWeight: isActive
+                                          ? FontWeight.w500
+                                          : FontWeight.w300,
+                                      decoration: TextDecoration.none,
+                                    ),
                                   ),
-                                ),
-                              SizedBox(height: 10),
-                            ],
+                                SizedBox(height: 10),
+                              ],
+                            ),
                           ),
                         );
                       })
