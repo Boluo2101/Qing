@@ -50,6 +50,8 @@ class WordsHeader extends StatelessWidget {
                 onTap: () {
                   print('能量值被点击了');
                   // 在这里添加能量值点击的处理逻辑
+
+                  context.push('/medal'); // 跳转到奖牌墙页面
                 },
                 child: Container(
                   height: 35,

@@ -16,4 +16,6 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 
-flutter build web --release --base-href /qing/
+flutter build web --release \
+  --base-href "/qing/" \
+  --dart-define=FLUTTER_WEB_CANVASKIT_URL=/qing/canvaskit/

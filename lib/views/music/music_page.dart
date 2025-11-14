@@ -26,6 +26,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       'cover': 'https://zcy-1251113349.file.myqcloud.com/testFiles/ll.png',
       'audio': 'https://zcy-1251113349.file.myqcloud.com/testFiles/lyy.mp3',
       'mainColor': Colors.yellow,
+      'favorite': false,
       "lyrics": [
         ["当世界面对死亡", 'Dang shi jie mian dui si wang'],
         ["灵魂点燃了微光", 'Ling hun dian ran le wei guang'],
@@ -58,6 +59,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       'author': 'Beyond',
       'cover': 'https://zcy-1251113349.file.myqcloud.com/testFiles/by.webp',
       'audio': 'https://zcy-1251113349.file.myqcloud.com/testFiles/ghsy.mp3',
+      'favorite': false,
       "lyrics": [
         ["钟声响起归家的讯号", "zung sang hoeng hei gwai gaa dik seon hou"],
         ["在他生命里", "zoi ta sang ming leoi"],
@@ -111,6 +113,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       'author': 'Beyond',
       'cover': 'https://testingbot.com/free-online-tools/random-avatar/900',
       'audio': 'https://zcy-1251113349.file.myqcloud.com/testFiles/lyy.mp3',
+      'favorite': false,
       "lyrics": [
         ["今天我 寒夜里看雪飘过", "Jin tian wo han ye li kan xue piao guo"],
         ["怀着冷却了的心窝飘远方", "Huai zhe leng que le de xin wo piao yuan fang"],
@@ -182,6 +185,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
       'author': 'Beyond',
       'cover': 'https://testingbot.com/free-online-tools/random-avatar/700',
       'audio': 'https://zcy-1251113349.file.myqcloud.com/testFiles/ghsy.mp3',
+      'favorite': false,
       "lyrics": [
         ["细雨带风湿透黄昏的街道", "xì yǔ dài fēng shī tòu huáng hūn de jiē dào"],
         ["抹去雨水双眼无故地仰望", "mǒ qù yǔ shuǐ shuāng yǎn wú gù de yǎng wàng"],
@@ -237,6 +241,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
     'author': '刘牧',
     'cover': 'https://testingbot.com/free-online-tools/random-avatar/400',
     'audio': 'https://zcy-1251113349.file.myqcloud.com/testFiles/lyy.mp3',
+    'favorite': false,
     "lyrics": [
       "当世界面对死亡",
       "灵魂点燃了微光",
@@ -285,6 +290,36 @@ class _MusicPageState extends ConsumerState<MusicPage> {
   final ScrollController _lyricsScrollController =
       ScrollController(); // 新增：歌词滚动控制器
 
+  // 用于处理封面水平拖动切换子页面
+  double _dragStartX = 0.0;
+  double _dragDx = 0.0;
+
+  void _onPanStart(DragStartDetails details) {
+    _dragStartX = details.globalPosition.dx;
+    _dragDx = 0.0;
+  }
+
+  void _onPanUpdate(DragUpdateDetails details) {
+    _dragDx += details.delta.dx;
+  }
+
+  void _onPanEnd(DragEndDetails details) {
+    const double threshold = 50.0;
+    if (_dragDx.abs() > threshold) {
+      int newIndex;
+      if (_dragDx < 0) {
+        // 向左滑动：切到下一个子页面
+        newIndex = indexActive == subPages.length - 1 ? 0 : indexActive + 1;
+      } else {
+        // 向右滑动：切到上一个子页面
+        newIndex = indexActive == 0 ? subPages.length - 1 : indexActive - 1;
+      }
+      changeIndexActive(newIndex);
+    }
+    _dragDx = 0.0;
+    _dragStartX = 0.0;
+  }
+
   // 更新歌词索引
   void updateLyricIndex(int? index) {
     if (index != null) {
@@ -324,6 +359,17 @@ class _MusicPageState extends ConsumerState<MusicPage> {
 
       _lyricsScrollController.animateTo(
         offset,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  // 更新歌词滚动条到指定位置
+  void _scrollLyricsToPosition(double position) {
+    if (_lyricsScrollController.hasClients) {
+      _lyricsScrollController.animateTo(
+        position,
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
@@ -386,6 +432,10 @@ class _MusicPageState extends ConsumerState<MusicPage> {
     print('Setting audio source: $url');
     try {
       await _audioPlayer.setUrl(url);
+
+      if (playing) {
+        _audioPlayer.play();
+      }
     } catch (e) {
       print("Error loading audio source: $e");
     }
@@ -481,6 +531,9 @@ class _MusicPageState extends ConsumerState<MusicPage> {
 
     // 切歌后重启进度条定时器
     _startProgressTimer();
+
+    // 更新歌词滚动条到顶部
+    _scrollLyricsToPosition(0.0);
   }
 
   void changeIndexActive(int index) {
@@ -791,6 +844,10 @@ class _MusicPageState extends ConsumerState<MusicPage> {
               onTap: () {
                 changeIndexNext();
               },
+              // 监听水平滑动手势
+              onPanStart: _onPanStart,
+              onPanUpdate: _onPanUpdate,
+              onPanEnd: _onPanEnd,
               child: Container(
                 width: double.infinity,
                 height: 300,
@@ -829,8 +886,18 @@ class _MusicPageState extends ConsumerState<MusicPage> {
               ),
 
               IconButton(
-                icon: Icon(Icons.favorite, color: Colors.redAccent, size: 30),
-                onPressed: () {},
+                icon: Icon(
+                  Icons.favorite,
+                  color: musicActive['favorite']
+                      ? Colors.redAccent
+                      : Colors.grey,
+                  size: 30,
+                ),
+                onPressed: () {
+                  setState(() {
+                    musicActive['favorite'] = !musicActive['favorite'];
+                  });
+                },
               ),
             ],
           ),
@@ -996,7 +1063,7 @@ class _MusicPageState extends ConsumerState<MusicPage> {
 
   Widget _buildTag(String text) {
     return Container(
-      padding: EdgeInsets.fromLTRB(5, 1, 5, 1), // 可选，添加内边距让文字不贴边
+      padding: EdgeInsets.fromLTRB(5, 3, 5, 3), // 可选，添加内边距让文字不贴边
       decoration: BoxDecoration(
         color: Colors.grey[300], // 背景色
         borderRadius: BorderRadius.circular(10), // 圆角半径
