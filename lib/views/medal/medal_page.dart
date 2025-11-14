@@ -303,8 +303,8 @@ class _MedalCardState extends State<_MedalCard>
         }
 
         return Container(
-          width: 120,
-          height: 120,
+          width: 100,
+          height: 100,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
             border: Border.all(
@@ -339,10 +339,10 @@ class _MedalCardState extends State<_MedalCard>
 
   Widget _buildHexagonMedal() {
     return SizedBox(
-      width: 120,
-      height: 120,
+      width: 100,
+      height: 100,
       child: CustomPaint(
-        size: const Size(120, 120),
+        size: const Size(100, 100),
         painter: HexagonPainter(
           color: widget.typeColor,
           isPressed: _isPressed,
@@ -366,10 +366,10 @@ class _MedalCardState extends State<_MedalCard>
 
   Widget _buildPentagonMedal() {
     return SizedBox(
-      width: 120,
-      height: 120,
+      width: 100,
+      height: 100,
       child: CustomPaint(
-        size: const Size(120, 120),
+        size: const Size(100, 100),
         painter: PentagonPainter(
           color: widget.typeColor,
           isPressed: _isPressed,
@@ -393,7 +393,7 @@ class _MedalCardState extends State<_MedalCard>
 
   Widget _buildCircularText() {
     const text = "PERFECTWEEK-2025";
-    const radius = 50.0; // 使用与 dialog 相同的半径
+    const radius = 40.0; // 使用与 dialog 相同的半径
     final textLength = text.length;
 
     return SizedBox(
@@ -428,8 +428,8 @@ class _MedalCardState extends State<_MedalCard>
 
   Widget _buildInnerCircle() {
     return Container(
-      width: 80,
-      height: 80,
+      width: 60,
+      height: 60,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topRight,
@@ -505,6 +505,7 @@ class _MedalDialogState extends State<_MedalDialog>
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: Colors.white.withOpacity(0.95),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Container(
         padding: const EdgeInsets.fromLTRB(40, 30, 40, 20),
@@ -686,8 +687,8 @@ class _MedalDialogState extends State<_MedalDialog>
                 text[index],
                 style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w100,
-                  color: widget.typeColor.withOpacity(0.5),
+                  fontWeight: FontWeight.w200,
+                  color: widget.typeColor.withOpacity(0.8),
                   letterSpacing: 0.5,
                 ),
               ),
