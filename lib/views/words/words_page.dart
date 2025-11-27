@@ -234,23 +234,29 @@ class _WordsPageState extends ConsumerState<WordsPage> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.border_all_outlined,
-                                size: 34,
-                                color: Color(0xFF000000),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                '阅读提升',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
+                          child: GestureDetector(
+                            onTap: () {
+                              // 在这里添加跳转逻辑
+                              GoRouter.of(context).push('/cars');
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.border_all_outlined,
+                                  size: 34,
+                                  color: Color(0xFF000000),
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 5),
+                                Text(
+                                  '阅读提升',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -262,23 +268,29 @@ class _WordsPageState extends ConsumerState<WordsPage> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.border_all_outlined,
-                                size: 34,
-                                color: Color(0xFF000000),
-                              ),
-                              SizedBox(height: 5),
-                              Text(
-                                '阅读提升',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.black,
+                          child: GestureDetector(
+                            onTap: () {
+                              // 在这里添加跳转逻辑
+                              GoRouter.of(context).push('/camera');
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.border_all_outlined,
+                                  size: 34,
+                                  color: Color(0xFF000000),
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 5),
+                                Text(
+                                  '阅读提升',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
