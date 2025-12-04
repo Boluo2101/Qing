@@ -17,6 +17,7 @@ import '../views/music/music_page.dart';
 import '../views/medal/medal_page.dart';
 import '../views/cars/cars_page.dart';
 import '../views/camera/camera_page.dart';
+import '../views/settings/settings_page.dart';
 
 // 路由列表 - 定义所有应用路由
 // 类似于Vue Router的routes数组，但Flutter使用GoRoute对象
@@ -97,6 +98,14 @@ final List<GoRoute> routes = [
     path: '/camera',
     builder: (context, state) {
       return CameraPage();
+    },
+  ),
+
+  // 设置页面
+  GoRoute(
+    path: '/settings',
+    builder: (context, state) {
+      return SettingsPage();
     },
   ),
 ];

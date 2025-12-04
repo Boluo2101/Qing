@@ -163,7 +163,10 @@ class _CameraPageState extends State<CameraPage> {
       padding: const EdgeInsets.all(11),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [app['color'].withOpacity(1.0), app['color'].withOpacity(1)],
+          colors: [
+            app['color'].withOpacity(1.0),
+            app['color'].withOpacity(1.0),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),

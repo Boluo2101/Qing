@@ -77,7 +77,10 @@ class _MinePageState extends State<MinePage> {
             ),
             IconButton(
               icon: const Icon(Icons.settings_outlined),
-              onPressed: () {},
+              onPressed: () {
+                // 跳转到设置页面
+                context.push('/settings');
+              },
             ),
           ],
         ),
