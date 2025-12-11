@@ -143,6 +143,12 @@ class WordsHeader extends StatelessWidget {
               Row(
                 children: [
                   IconButton(
+                    icon: Icon(Icons.calendar_month_outlined, color: textColor),
+                    onPressed: () {
+                      context.push('/calendar'); // 跳转到日历页面
+                    },
+                  ),
+                  IconButton(
                     icon: Icon(Icons.mail_outline_sharp, color: textColor),
                     onPressed: () {
                       // Jump to feedback

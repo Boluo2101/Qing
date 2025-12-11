@@ -6,7 +6,7 @@ class CONFIGs {
       'https://zcy-1251113349.cos.ap-chengdu.myqcloud.com/qing-app-server';
 
   // 超时配置
-  static const int connectTimeout = 30000; // 30秒
+  static const int connectTimeout = 60000; // 60秒
 
   // 主题
   static const themeOptions = {};

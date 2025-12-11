@@ -18,6 +18,7 @@ import '../views/medal/medal_page.dart';
 import '../views/cars/cars_page.dart';
 import '../views/camera/camera_page.dart';
 import '../views/settings/settings_page.dart';
+import '../views/calendar/calendar_page.dart';
 
 // 路由列表 - 定义所有应用路由
 // 类似于Vue Router的routes数组，但Flutter使用GoRoute对象
@@ -106,6 +107,14 @@ final List<GoRoute> routes = [
     path: '/settings',
     builder: (context, state) {
       return SettingsPage();
+    },
+  ),
+
+  // 日历
+  GoRoute(
+    path: '/calendar',
+    builder: (context, state) {
+      return CalendarPage();
     },
   ),
 ];

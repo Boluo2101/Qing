@@ -14,7 +14,7 @@ class SettingsPage extends StatelessWidget {
     {'title': '', 'type': 'hr'},
     {'title': '账号管理'},
     {'title': '', 'type': 'hr'},
-    {'title': '深色主题'},
+    {'title': '显示设置'},
     {'title': '', 'type': 'hr'},
     {'title': '缓存管理'},
     {'title': '个人信息收集清单'},
@@ -55,19 +55,21 @@ class SettingsPage extends StatelessWidget {
           }
 
           // 其他菜单项
-          return Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                bottom: BorderSide(color: Color.fromRGBO(245, 245, 245, 1)),
-              ),
-            ),
-            child: ListTile(
-              title: Text(menus[menuIndex]['title']!),
+          return Material(
+            color: Colors.white,
+            child: InkWell(
               onTap: () {
                 // 点击问题时的处理逻辑
-                print('点击了问题：${menus[menuIndex]['title']}');
+                print('点击了：${menus[menuIndex]['title']}');
               },
+              child: Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Color.fromRGBO(245, 245, 245, 1)),
+                  ),
+                ),
+                child: ListTile(title: Text(menus[menuIndex]['title']!)),
+              ),
             ),
           );
         },
