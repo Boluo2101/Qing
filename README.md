@@ -182,6 +182,16 @@ flutter build web --release \
 | Windows | ✅ |
 | Linux | ✅ |
 
+## 🎬 演示视频
+
+### Demo 1 — 综合功能展示
+
+<video src="https://github.com/Boluo2101/Qing/raw/main/assets/videos/flutter_demo1.mp4" width="300" controls></video>
+
+### Demo 2 — 更多功能演示
+
+<video src="https://github.com/Boluo2101/Qing/raw/main/assets/videos/flutter_demo2.mp4" width="300" controls></video>
+
 ## 📄 许可证
 
 Private License - 保留所有权利
@@ -350,6 +360,16 @@ flutter build web --release \
 | macOS | ✅ |
 | Windows | ✅ |
 | Linux | ✅ |
+
+## 🎬 Demo Videos
+
+### Demo 1 — Feature Overview
+
+<video src="https://github.com/Boluo2101/Qing/raw/main/assets/videos/flutter_demo1.mp4" width="300" controls></video>
+
+### Demo 2 — More Features
+
+<video src="https://github.com/Boluo2101/Qing/raw/main/assets/videos/flutter_demo2.mp4" width="300" controls></video>
 
 ## 📄 License
 
